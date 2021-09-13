@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Contacts</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="add_contact">Add Contact</string>
+    <string name="find_email">Find Email</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="enter_phone">Enter Phone</string>
+    <string name="GetContact">Get Contact</string>
+</resources>
