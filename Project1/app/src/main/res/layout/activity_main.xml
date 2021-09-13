@@ -22,7 +22,7 @@
             android:gravity="center"
             android:text="@string/enter_name"
             android:textColor="@color/text"
-            android:textSize="35sp" />
+            android:textSize="30sp" />
 
         <EditText
             android:id="@+id/nameText"
@@ -42,7 +42,7 @@
             android:gravity="center"
             android:text="@string/enter_email"
             android:textColor="@color/text"
-            android:textSize="35sp" />
+            android:textSize="30sp" />
 
         <EditText
             android:id="@+id/emailText"
@@ -62,7 +62,7 @@
             android:gravity="center"
             android:text="@string/enter_phone"
             android:textColor="@color/text"
-            android:textSize="35sp" />
+            android:textSize="30sp" />
 
         <EditText
             android:id="@+id/phoneText"
@@ -116,7 +116,7 @@
                 android:scrollHorizontally="true"
                 android:text="@string/email"
                 android:textColor="@color/text"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
         </HorizontalScrollView>
 
         <HorizontalScrollView
@@ -132,7 +132,7 @@
                 android:scrollHorizontally="true"
                 android:text="@string/phone"
                 android:textColor="@color/text"
-                android:textSize="30sp" />
+                android:textSize="25sp" />
         </HorizontalScrollView>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
