@@ -1,0 +1,4 @@
+com/singhjawand/lab05/MainActivity.java
+ com.singhjawand.lab05.MainActivity
+com/singhjawand/lab05/BuildConfig.java
+ com.singhjawand.lab05.BuildConfig
