@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <HorizontalScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/med_length"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias=".15">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="@dimen/small_length"
+                android:layout_height="wrap_content"
+                android:background="@color/red"
+                android:text="@string/click_me" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="@dimen/small_length"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@color/red"
+                android:text="@string/click_me" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="@dimen/small_length"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@color/red"
+                android:text="@string/click_me" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="@dimen/small_length"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@color/red"
+                android:text="@string/click_me" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="@dimen/small_length"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@color/red"
+                android:text="@string/click_me" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:layout_width="@dimen/small_length"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:background="@color/red"
+                android:text="@string/click_me" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/horiz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintGuide_percent=".35" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="@dimen/med_length"
+        android:layout_height="@dimen/small_length"
+        android:layout_marginBottom="@dimen/large_length"
+        android:background="@color/black"
+        android:onClick="layout7"
+        android:text="@string/layout6"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

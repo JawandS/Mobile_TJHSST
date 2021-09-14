@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="@dimen/large_length"
+        android:layout_height="@dimen/large_length"
+        android:background="@color/violet"
+        android:text="@string/centered"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="@dimen/small_length"
+        android:layout_height="@dimen/small_length"
+        android:background="@color/red"
+        android:text="@string/i_m_left"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@id/gl_h1"
+        app:layout_constraintRight_toLeftOf="@id/gl_v1" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="@dimen/med_length"
+        android:layout_height="@dimen/med_length"
+        android:background="@color/teal_700"
+        android:text="@string/i_m_right"
+        app:layout_constraintLeft_toRightOf="@id/gl_v1"
+        app:layout_constraintTop_toBottomOf="@id/gl_h1" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_h1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.36" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_v1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.30" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="@dimen/med_length"
+        android:layout_height="@dimen/small_length"
+        android:layout_marginBottom="@dimen/large_length"
+        android:background="@color/black"
+        android:onClick="layout3"
+        android:text="@string/layout2"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

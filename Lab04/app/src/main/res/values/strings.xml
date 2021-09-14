@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">Lab04</string>
+    <string name="centered">Centered</string>
+    <string name="i_m_left">I\m Left</string>
+
+    <string name="greeting">Hello!</string>
+    <string name="hello_tjhsst">Hello TJHSST!</string>
+    <string name="i_m_right">I\m Right</string>
+    <string name="change">Change!</string>
+    <string name="contrast">Contrast!!</string>
+    <string name="button">button</string>
+    <string name="start">start</string>
+    <string name="layout1">layout1</string>
+    <string name="layout2">layout2</string>
+    <string name="layout3">layout3</string>
+    <string name="layout4">layout4</string>
+    <string name="layout5">layout5</string>
+    <string name="longquote">
+1. “I’m sick of following my dreams, man. I’m just going to ask where they’re going and hook up with ’em later.”
+—Mitch Hedberg
+\n\n\n\n
+
+
+2. “Gentlemen, you can’t fight in here. This is the war room.”
+—President Merkin Muffley (Peter Sellers), Dr. Strangelove
+\n\n\n\n
+
+3. “My mother always used to say: The older you get, the better you get, unless you’re a banana.”
+—Rose (Betty White), The Golden Girls
+\n\n\n\n
+
+4. “Halloween is the beginning of the holiday shopping season. That’s for women. The beginning of the holiday shopping season for men is Christmas Eve.”
+—David Letterman
+        \n\n\n\n
+        1. “I’m sick of following my dreams, man. I’m just going to ask where they’re going and hook up with ’em later.”
+—Mitch Hedberg
+\n\n\n\n
+
+
+2. “Gentlemen, you can’t fight in here. This is the war room.”
+—President Merkin Muffley (Peter Sellers), Dr. Strangelove
+\n\n\n\n
+                1. “I’m sick of following my dreams, man. I’m just going to ask where they’re going and hook up with ’em later.”
+—Mitch Hedberg
+\n\n\n\n
+
+
+2. “Gentlemen, you can’t fight in here. This is the war room.”
+—President Merkin Muffley (Peter Sellers), Dr. Strangelove
+\n\n\n\n
+</string>
+
+    <string name="layout6">layout6</string>
+    <string name="click_me">Click Me!</string>
+    <string name="layout7">layout7</string>
+</resources>
