@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="slider_vals">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+    </string-array>
+    <integer-array name="colors">
+        <item>9510695</item>
+        <item>16711680</item>
+        <item>16609174</item>
+        <item>2754884</item>
+    </integer-array>
+</resources>
