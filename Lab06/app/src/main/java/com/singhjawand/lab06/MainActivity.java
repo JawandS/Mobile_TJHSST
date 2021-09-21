@@ -16,39 +16,38 @@ import android.view.ViewGroup;
 import com.google.android.gms.ads.mediation.Adapter;
 
 public class MainActivity extends AppCompatActivity {
-    ViewPager2 mViewPager;
-    RecyclerView.Adapter mMyFragmentStateAdapter;
+    //ViewPager2 mViewPager;
+    //RecyclerView.Adapter mMyFragmentStateAdapter;
     final int NUM_ITEMS = 5;
     //https://developer.android.com/training/animation/vp2-migration
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        //assign the instance of ViewPager
-        mViewPager = findViewById(R.id.container);
-
-        //create an adapter for the ViewPager
-        mMyFragmentStateAdapter = new MyFragmentStateAdapter(this);
-
-        //set the adapter for the ViewPager
-        mViewPager.setAdapter(mMyFragmentStateAdapter);
+//        setContentView(R.layout.activity_main);
+//
+//        //assign the instance of ViewPager
+//        mViewPager = findViewById(R.id.container);
+//
+//        //create an adapter for the ViewPager
+//        mMyFragmentStateAdapter = new MyFragmentStateAdapter(this);
+//
+//        //set the adapter for the ViewPager
+//        mViewPager.setAdapter(mMyFragmentStateAdapter);
     }
-    public class MyFragmentStateAdapter extends FragmentStateAdapter {
-
-        public MyFragmentStateAdapter(@NonNull FragmentActivity fragmentActivity) {
-            super(fragmentActivity);
-        }
-        @NonNull
-        @Override
-        public MainFragment createFragment(int position) {
-            //return a new instance of MainFragment
-            return MainFragment.newInstance(mViewPager,position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return NUM_ITEMS;//number of objects in ViewPager
-        }
-    }
+//    public class MyFragmentStateAdapter extends FragmentStateAdapter{
+//
+//        public MyFragmentStateAdapter(@NonNull FragmentActivity fragmentActivity) {
+//            super(fragmentActivity);
+//        }
+//        @NonNull
+//        @Override
+//        public MainFragment createFragment(int position) {
+//            //return a new instance of MainFragment
+//            return MainFragment.newInstance(mViewPager,position);
+//        }
+//        @Override
+//        public int getItemCount() {
+//            return NUM_ITEMS;//number of objects in ViewPager
+//        }
+//    }
 }
