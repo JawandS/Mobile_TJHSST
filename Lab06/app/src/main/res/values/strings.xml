@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Lab06</string>
-    <string name="welcome_to_the_fragment">Welcome to the Fragment</string>
+    <string name="press_me">PRESS ME</string>
 </resources>

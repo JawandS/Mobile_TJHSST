@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public MainFragment createFragment(int position) {
             //return a new instance of MainFragment
-            return MainFragment.newInstance(mViewPager,position);
+            return MainFragment.newInstance(mViewPager, position);
         }
         @Override
         public int getItemCount() {
