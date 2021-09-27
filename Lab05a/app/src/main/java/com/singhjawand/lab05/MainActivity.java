@@ -205,4 +205,8 @@ public class MainActivity extends AppCompatActivity {
 
         saveValues();
     }
+
+    public void finish(View view) {
+        finish();
+    }
 }

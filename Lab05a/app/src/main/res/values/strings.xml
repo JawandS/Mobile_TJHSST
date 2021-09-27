@@ -11,4 +11,5 @@
     <string name="global_copy">Global Copy</string>
     <string name="onrestart1">onRestart:</string>
     <string name="reset_lifetime_data">Reset Lifetime Data</string>
+    <string name="finish_me">FINISH ME</string>
 </resources>

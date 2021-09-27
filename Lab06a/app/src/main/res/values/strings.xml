@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Lab06a</string>
+    <string name="fragment">FRAGMENT!</string>
 </resources>

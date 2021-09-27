@@ -13,7 +13,16 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="eb80665d-0071-4d92-b5ab-08ff87091e8b" name="Default Changelist" comment="Initial commit and push of all files" />
+    <list default="true" id="eb80665d-0071-4d92-b5ab-08ff87091e8b" name="Default Changelist" comment="Initial commit and push of all files">
+      <change afterPath="$PROJECT_DIR$/../Lab06a/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lab06a/app/src/main/res/layout/fragment.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gradle/7.0.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.0.2/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab06a/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab06a/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab06a/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab06a/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab06a/app/src/main/java/com/singhjawand/lab06a/MainActivity.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab06a/app/src/main/java/com/singhjawand/lab06a/MainActivity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab06a/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab06a/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lab06a/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lab06a/app/src/main/res/values/strings.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,7 +54,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Lab03" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="RunManager">
@@ -140,6 +149,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$" />
+    </ignored-roots>
     <MESSAGE value="Initial commit and push of all files" />
     <option name="LAST_COMMIT_MESSAGE" value="Initial commit and push of all files" />
   </component>
