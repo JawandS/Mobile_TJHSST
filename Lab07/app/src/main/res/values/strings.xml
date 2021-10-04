@@ -6,4 +6,8 @@
     <string name="textview">TextView</string>
     <string name="button">Button</string>
     <string name="clickmeee">CLICKMEEE</string>
+    <string name="show">SHOW</string>
+    <string name="hide">HIDE</string>
+    <string name="replace">REPLACE</string>
+    <string name="add">ADD</string>
 </resources>
