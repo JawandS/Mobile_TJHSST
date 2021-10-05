@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Lab07b</string>
+    <string name="fragment">FRAGMENT!!!</string>
+    <string name="replace">Replace</string>
+    <string name="add">ADD</string>
+    <string name="id_number">ID Number</string>
+    <string name="delete">DELETE</string>
 </resources>
