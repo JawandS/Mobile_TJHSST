@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
-    int id = 0;
+    int id = 1;
     LinearLayout main;
 
     @Override
@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     public void replace_fragment(View view) {
         EditText edit = findViewById(R.id.id_num);
         int temp_id = Integer.parseInt(String.valueOf(edit.getText()));
+        System.out.println("LINE 50 " + temp_id);
 
         // Begin the transaction
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -42,11 +43,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void add_fragment(View view) {
-        id++;
         FrameLayout temp = new FrameLayout(this);
         main.addView(temp);
         temp.setId(id);
 
+        System.out.println("LINE 50 " + id);
         // Begin the transaction
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         // Replace the contents of the container with the new fragment
@@ -55,16 +56,38 @@ public class MainActivity extends AppCompatActivity {
         // or ft.add(R.id.your_placeholder, new FooFragment());
         // Complete the changes added above
         ft.commit();
+        id++;
     }
 
     public void delete_fragment(View view){
+//        EditText edit = findViewById(R.id.id_num);
+//        int temp_id = Integer.parseInt(String.valueOf(edit.getText()));
+        id--;
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(id)));
+        ft.commit();
+    }
+
+    public void hide_fragment(View view){
         EditText edit = findViewById(R.id.id_num);
         int temp_id = Integer.parseInt(String.valueOf(edit.getText()));
 
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.remove(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(temp_id)));
+        ft.hide(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(temp_id)));
         ft.commit();
     }
+
+    public void show_fragment(View view){
+        EditText edit = findViewById(R.id.id_num);
+        int temp_id = Integer.parseInt(String.valueOf(edit.getText()));
+
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.show(Objects.requireNonNull(getSupportFragmentManager().findFragmentById(temp_id)));
+        ft.commit();
+    }
+
+
 
     @SuppressLint("ResourceAsColor")
     public void change_background(View view){

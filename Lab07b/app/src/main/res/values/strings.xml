@@ -5,4 +5,7 @@
     <string name="add">ADD</string>
     <string name="id_number">ID Number</string>
     <string name="delete">DELETE</string>
+    <string name="show">SHOW</string>
+    <string name="hide">HIDE</string>
+    <string name="_0">0</string>
 </resources>
