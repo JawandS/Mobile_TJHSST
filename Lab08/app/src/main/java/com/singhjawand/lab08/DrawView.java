@@ -11,8 +11,8 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 public class DrawView extends View {
-    private Paint painter = new Paint();
-    private int y = 0, dy = 5;
+    private final Paint painter = new Paint();
+    private int y = 0, dy = 10;
     public DrawView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
@@ -22,13 +22,21 @@ public class DrawView extends View {
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         // changes the color of the painter
-        painter.setColor(Color.CYAN);
-        canvas.drawCircle(100, y, 100F, painter);
-        canvas.drawCircle(500, 100, 100F, new Paint());
+        painter.setARGB(250, 255,255,100);
+        for(float x = 25; x < getWidth() - 75; x += 10) {
+            canvas.drawCircle(x, -1 * (y + x), 75F, painter);
+        }
+
+        for(float x = getWidth() - 75; x > 25; x -= 10) {
+            canvas.drawCircle(x, y - x, 75F, painter);
+        }
+
         y += dy;
-        y %= getHeight() - 100;
+        if (y < 0) dy *= -1;
+        if (y > getHeight()) dy *= -1;
         invalidate();
     }
+
 
 
     public int getDy() {
@@ -39,3 +47,7 @@ public class DrawView extends View {
         this.dy = dy;
     }
 }
+
+//        canvas.drawRect(x-10, y-175, x+10, y-100, new Paint());
+//        canvas.drawArc(y-50, y+50, x-10, 10, 20, false, new Paint());
+//        canvas.drawCircle(500, 100, 100F, new Paint());

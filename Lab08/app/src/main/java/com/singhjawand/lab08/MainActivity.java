@@ -18,6 +18,5 @@ public class MainActivity extends AppCompatActivity {
 
     public void reverseY(View view) {
         drawView.setDy(drawView.getDy() * -1);
-
     }
 }
