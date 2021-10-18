@@ -26,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         mMyFragmentStateAdapter = new MyFragmentStateAdapter(this);
         //set adapter
         mViewPager2.setAdapter(mMyFragmentStateAdapter);
+
+
     }
 
     private class MyFragmentStateAdapter extends FragmentStateAdapter {
