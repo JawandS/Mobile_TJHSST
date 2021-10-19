@@ -70,6 +70,14 @@
                 android:onClick="hide_fragment"
                 android:text="@string/hide" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="25dp"
+                android:onClick="add_buttonFragment"
+                android:text="@string/add_button"
+                style="?android:attr/buttonBarButtonStyle" />
+
         </LinearLayout>
 
     </HorizontalScrollView>

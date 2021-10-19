@@ -99,4 +99,21 @@ public class MainActivity extends AppCompatActivity {
         else
             view.setBackground(new ColorDrawable(R.color.white));
     }
+
+    public void add_buttonFragment(View view) {
+        FrameLayout temp = new FrameLayout(this);
+        main.addView(temp);
+        temp.setId(id);
+
+        System.out.println("LINE 50 " + id);
+        // Begin the transaction
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        // Replace the contents of the container with the new fragment
+
+        ft.add(id, new ButtonFragment(), String.valueOf(id));
+        // or ft.add(R.id.your_placeholder, new FooFragment());
+        // Complete the changes added above
+        ft.commit();
+        id++;
+    }
 }
