@@ -48,8 +48,9 @@ public class DrawView extends View {
             int rad = radius[counter];
             canvas.drawCircle(x, y, rad, painter);
             pos_y[counter] = y + dy;
-            if (y > getHeight() + 60) {
-                dy_vals[counter] = (int) (dy * 0.8 * -1);
+            if (y > getHeight()) {
+                dy_vals[counter] = (int) (dy * 0.9 * -1);
+                // change to 0.8 to have ball counce less distace every time
                 pos_y[counter] = getBottom();
             } else if (y < 0) {
                 if (dy < 0)
@@ -64,6 +65,7 @@ public class DrawView extends View {
         }
 
 //        if (dy_vals[0] > 5 && pos_y[0] > getBottom() - 75)
+
         invalidate();
     }
 
@@ -73,22 +75,169 @@ public class DrawView extends View {
         acceleration += 1;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 //        super.onTouchEvent(event);
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            int x = (int) event.getX();
+            int y = (int) event.getY();
             for (int counter = 0; counter < 6; counter++) {
-                pos_y[counter] -= 25;
-                dy_vals[counter] -= 25;
+                pos_y[counter] -= rand.nextInt(50) - 10;
+                dy_vals[counter] += rand.nextInt(30) - 5;
+
+                if(contains(x, y, pos_x[counter], pos_y[counter], radius[counter])){
+                    pos_y[counter] -= rand.nextInt(75) - 10;
+                    dy_vals[counter] += rand.nextInt(30) - 5;
+                    radius[counter] += 15;
+                    color_values[counter][0] = 255;
+                    color_values[counter][1] = 255;
+                    color_values[counter][2] = 255;
+                }
             }
-        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
-            gravity++;
         }
 
         return true;
     }
 
+    public boolean contains(int x, int y, int pos_x, int pos_y, int radius) {
+        radius += 20;
+        int left = pos_x - radius;
+        int right = pos_x + radius;
+        int bottom = pos_y + radius;
+        int top = pos_y - radius;
+        return x >= left && x < right && y >= top && y < bottom;
+    }
+
 }
+
+class RectF {
+    public double left, top, right, bottom;
+    public int centerX, centerY;
+    public RectF()
+    {
+        left = top = right = bottom = 0;
+    }
+    public RectF(RectF rectF)
+    {
+        if (rectF == null)
+        {
+            left = top = right = bottom = 0;
+        }
+        else
+        {
+            left = rectF.left;
+            top = rectF.top;
+            right = rectF.right;
+            bottom = rectF.bottom;
+        }
+    }
+    public RectF(double left, double top, double right, double bottom) {
+        this.left=left;
+        this.top=top;
+        this.right=right;
+        this.bottom=bottom;
+    }
+    public double centerX() {
+        return (left + right) * 0.5;
+    }
+
+    public double centerY() {
+        return (top + bottom) * 0.5;
+    }
+
+    public double getWidth() {
+        return right - left;
+    }
+
+    public double getHeight() {
+        return bottom - top;
+    }
+    public String toString() {
+        return "RectF(" + left + ", " + top + ", " + right + ", " + bottom + ")";
+    }
+    public void set(float left, float top, float right, float bottom) {
+
+        this.left   = left;
+        this.top    = top;
+        this.right  = right;
+        this.bottom = bottom;
+    }
+    public void setCenterX( int x) {
+        centerX = x;
+    }
+
+    public void setCenterY(int y) {
+        centerY = y;
+    }
+
+    public void set(RectF src) {
+        this.left   = src.left;
+        this.top    = src.top;
+        this.right  = src.right;
+        this.bottom = src.bottom;
+    }
+    public void setEmpty()
+    {
+        left = 0;
+        top=0;
+        right=0;
+        bottom=0;
+    }
+    public void offset(double dx, double dy) {
+
+        left    += dx;
+        top     += dy;
+        right   += dx;
+        bottom  += dy;
+    }
+    public void offsetTo(double newLeft, double newTop) {
+
+        right += newLeft - left;
+        bottom += newTop - top;
+        left = newLeft;
+        top = newTop;
+    }
+    public boolean isEmpty() {
+        return left >= right || top >= bottom;
+    }
+    public boolean intersects(float left, float top, float right, float bottom) {
+        if(isEmpty())
+            return false;
+        return this.right>left && this.left <right && this.top<bottom &&this.bottom>top;
+
+    }
+    public boolean intersects(RectF r) {
+        if(r==null||isEmpty())
+            return false;
+        return this.right>r.left && this.left < r.right && this.top<r.bottom &&this.bottom>r.top;
+    }
+    public boolean contains(double x, double y) {
+
+        return !isEmpty()  && x >= left && x < right && y >= top && y < bottom;
+    }
+    public boolean contains(double left, double top, double right, double bottom) {
+
+        return !isEmpty()&& this.left <= left && this.top <= top && this.right >= right && this.bottom >= bottom;
+    }
+    public boolean contains(RectF r)
+    {
+        return !isEmpty()&& left <= r.left && top <= r.top && right >= r.right && bottom >= r.bottom;
+    }
+
+
+}
+
+
+//        else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+//                if (gravity != 0) {
+//                if(rand.nextInt(2) % 2 == 0)
+//                gravity++;
+//                else
+//                gravity--;
+//                }
+//                }
+
 
 //        canvas.drawRect(x-10, y-175, x+10, y-100, new Paint());
 //        canvas.drawArc(y-50, y+50, x-10, 10, 20, false, new Paint());
