@@ -14,9 +14,9 @@ import androidx.annotation.Nullable;
 public class DrawView extends View {
     private final Paint painter = new Paint();
     int right = getRight();
-    int[] pos_x = {100, 175, 290, 400, 600, 900};
+    int[] pos_x = {150, 300, 450, 600, 750, 900};
     int[] pos_y = {20, 20, 20, 20, 20, 20};
-    int[] radius = {20, 35, 50, 65, 80, 95};
+    int[] radius = {60, 60, 60, 60, 60, 60};
     int[] dy_vals = {0, 0, 0, 0, 0, 0};
     //    int[] dy_vals = {10, 11, 12, 13, 14, 15};
     int[][] color_values = {{255, 50, 100}, {200, 50, 200}, {100, 0, 100}, {0, 50, 100}, {200, 10, 100}, {50, 255, 50}};
@@ -44,15 +44,18 @@ public class DrawView extends View {
             pos_y[counter] = y + dy;
             if (y > getHeight()) {
                 if (dy < 50 && dy > 0)
-                    dy_vals[counter] = (int) (dy * -0.9);
+                    dy_vals[counter] = (int) (dy * -0.8);
                 else if (dy > 0)
-                    dy_vals[counter] = (int) (dy * -0.9);
+                    dy_vals[counter] = (int) (dy * -0.8);
                 pos_y[counter] = getBottom();
             } else if (y < 0) {
                 if (dy < 0)
                     dy_vals[counter] = dy * -1;
                 pos_y[counter] = getTop();
             } else {
+//                if (dy_vals[counter] < 1 && pos_y[counter] > 500)
+//                    dy_vals[counter] = 0;
+//                else
                 dy_vals[counter] = (int) (dy + gravity);
             }
         }
