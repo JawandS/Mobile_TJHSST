@@ -38,9 +38,9 @@ public class DrawView extends View {
                 pos_x[i] = rand.nextInt(getWidth() - 25) + 25;
                 pos_y[i] = rand.nextInt(getHeight() - 25) + 25;
                 radius[i] = rand.nextInt(5) + 2;
-                color_values[i][0] = rand.nextInt(255);
-                color_values[i][1] = rand.nextInt(255);
-                color_values[i][2] = rand.nextInt(255);
+                color_values[i][0] = rand.nextInt(180) + 75;
+                color_values[i][1] = rand.nextInt(75);
+                color_values[i][2] = rand.nextInt(75);
 //                color_values[i][0] = 100;
 //                color_values[i][1] = 50;
 //                color_values[i][2] = 255;
