@@ -15,16 +15,14 @@ import java.util.Random;
 
 public class DrawView extends View {
     private final Paint painter = new Paint();
-    int right = getRight();
-    int[] pos_x = {150, 300, 450, 600, 750, 900};
-    int[] pos_y = {20, 20, 20, 20, 20, 20};
-    int[] radius = {60, 60, 60, 60, 60, 60};
-    int[] dy_vals = {0, 0, 0, 0, 0, 0};
-    //    int[] dy_vals = {10, 11, 12, 13, 14, 15};
-    int[][] color_values = {{255, 50, 100}, {200, 50, 200}, {100, 0, 100}, {0, 50, 100}, {200, 10, 100}, {50, 255, 50}};
-    int acceleration = 1;
-    double gravity = 1;
+    int[] pos_x = new int[50];
+    int[] pos_y = new int[50];
+    int[] radius = new int[50];
+    int dy = -5;
+    int[] color_values = {255, 255, 255};
     Random rand = new Random();
+    int generate = 0;
+    int counter = 0;
 
     public DrawView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -35,40 +33,45 @@ public class DrawView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-//        float bounce = (float) Math.abs(rand.nextFloat() + 0.05);
-
-        for (int counter = 0; counter < 6; counter++) {
-            // changes the color of the painter
-            int[] colors = color_values[counter];
-            painter.setARGB(250, colors[0], colors[1], colors[2]);
-            int x = pos_x[counter];
-            int y = pos_y[counter];
-            int dy = dy_vals[counter];
-            int rad = radius[counter];
-            canvas.drawCircle(x, y, rad, painter);
-            pos_y[counter] = y + dy;
-            if (y > getHeight() + 60) {
-                dy_vals[counter] = (int) (dy * 0.8 * -1);
-                pos_y[counter] = getBottom();
-            } else if (y < 0) {
-                if (dy < 0)
-                    dy_vals[counter] = dy * -1;
-                pos_y[counter] = getTop();
-            } else {
-//                if (dy_vals[counter] < 1 && pos_y[counter] > 500)
-//                    dy_vals[counter] = 0;
-//                else
-                dy_vals[counter] = (int) (dy + gravity);
+        if (generate == 0){
+            for(int i = 0; i < pos_x.length; i++){
+                pos_x[i] = rand.nextInt(getWidth() - 25) + 25;
+                pos_y[i] = rand.nextInt(getHeight() - 25) + 25;
+                radius[i] = rand.nextInt(5) + 2;
+                // changes the color of the painter to white
+                painter.setARGB(255, 255, 255, 255);
+            }
+            generate = 1;
+        }else if(generate == 2){
+            for(int i = 0; i < pos_x.length; i++){
+                radius[i]++;
+                // changes the color of the painter to red
+                painter.setARGB(235, 255, 10, 10);
             }
         }
 
-//        if (dy_vals[0] > 5 && pos_y[0] > getBottom() - 75)
+        for (int counter = 0; counter < pos_x.length; counter++) {
+
+            int x = pos_x[counter];
+            int y = pos_y[counter];
+            int rad = radius[counter];
+
+            canvas.drawCircle(x, y, rad, painter);
+
+            pos_y[counter] = y + dy;
+            if (y < 20) {
+                pos_y[counter] = getHeight() - 10;
+            }
+        }
+
+        counter++;
+        if (counter % 100 == 0)
+            dy--;
+        if (counter == 800)
+            generate = 2;
+
         invalidate();
     }
 
-    @Override
-    public void setOnClickListener(@Nullable OnClickListener l) {
-        super.setOnClickListener(l);
-        acceleration += 1;
-    }
+
 }
