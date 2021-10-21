@@ -11,6 +11,8 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import java.util.Random;
+
 public class DrawView extends View {
     private final Paint painter = new Paint();
     int right = getRight();
@@ -22,6 +24,7 @@ public class DrawView extends View {
     int[][] color_values = {{255, 50, 100}, {200, 50, 200}, {100, 0, 100}, {0, 50, 100}, {200, 10, 100}, {50, 255, 50}};
     int acceleration = 1;
     double gravity = 1;
+    Random rand = new Random();
 
     public DrawView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -31,6 +34,8 @@ public class DrawView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+//        float bounce = (float) Math.abs(rand.nextFloat() + 0.05);
 
         for (int counter = 0; counter < 6; counter++) {
             // changes the color of the painter
@@ -42,11 +47,8 @@ public class DrawView extends View {
             int rad = radius[counter];
             canvas.drawCircle(x, y, rad, painter);
             pos_y[counter] = y + dy;
-            if (y > getHeight()) {
-                if (dy < 50 && dy > 0)
-                    dy_vals[counter] = (int) (dy * -0.8);
-                else if (dy > 0)
-                    dy_vals[counter] = (int) (dy * -0.8);
+            if (y > getHeight() + 60) {
+                dy_vals[counter] = (int) (dy * 0.8 * -1);
                 pos_y[counter] = getBottom();
             } else if (y < 0) {
                 if (dy < 0)
