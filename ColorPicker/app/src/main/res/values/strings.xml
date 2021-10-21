@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ColorPicker</string>
+    <string name="red">RED!</string>
+    <string name="green">GREEN</string>
+    <string name="blue">BLUE</string>
+    <string name="Red">RED</string>
+    <string name="apply">APPLY</string>
+    <string name="random">RANDOM</string>
+    <string name="_200">200</string>
+</resources>
