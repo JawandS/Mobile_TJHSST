@@ -19,7 +19,7 @@ public class DrawView extends View {
     int[] pos_y = new int[50];
     int[] radius = new int[50];
     int dy = -5;
-    int[] color_values = {255, 255, 255};
+    int[][] color_values = new int[100][3];
     Random rand = new Random();
     int generate = 0;
     int counter = 0;
@@ -33,20 +33,26 @@ public class DrawView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        if (generate == 0){
-            for(int i = 0; i < pos_x.length; i++){
+        if (generate == 0) {
+            for (int i = 0; i < pos_x.length; i++) {
                 pos_x[i] = rand.nextInt(getWidth() - 25) + 25;
                 pos_y[i] = rand.nextInt(getHeight() - 25) + 25;
                 radius[i] = rand.nextInt(5) + 2;
+                color_values[i][0] = rand.nextInt(255);
+                color_values[i][1] = rand.nextInt(255);
+                color_values[i][2] = rand.nextInt(255);
+//                color_values[i][0] = 100;
+//                color_values[i][1] = 50;
+//                color_values[i][2] = 255;
                 // changes the color of the painter to white
                 painter.setARGB(255, 255, 255, 255);
             }
             generate = 1;
-        }else if(generate == 2){
-            for(int i = 0; i < pos_x.length; i++){
-                radius[i]++;
-                // changes the color of the painter to red
-                painter.setARGB(235, 255, 10, 10);
+        } else if (generate >= 2) {
+            for (int i = 0; i < pos_x.length; i++) {
+                radius[i] = generate * 2;
+                // changes the color of the painter to random color
+                painter.setARGB(255, color_values[i][0], color_values[i][1], color_values[i][2]);
             }
         }
 
@@ -67,8 +73,12 @@ public class DrawView extends View {
         counter++;
         if (counter % 100 == 0)
             dy--;
-        if (counter == 800)
-            generate = 2;
+        if (counter >= 400) {
+            if (counter % 100 == 0)
+                generate -= 5;
+            else if (counter % 5 == 0)
+                generate++;
+        }
 
         invalidate();
     }

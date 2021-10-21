@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.ColorSpace;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.Nullable;
@@ -71,6 +72,22 @@ public class DrawView extends View {
         super.setOnClickListener(l);
         acceleration += 1;
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+//        super.onTouchEvent(event);
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            for (int counter = 0; counter < 6; counter++) {
+                pos_y[counter] -= 25;
+                dy_vals[counter] -= 25;
+            }
+        } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+            gravity++;
+        }
+
+        return true;
+    }
+
 }
 
 //        canvas.drawRect(x-10, y-175, x+10, y-100, new Paint());
