@@ -19,7 +19,7 @@ public class DrawView extends View {
     int[] pos_y = new int[50];
     int[] radius = new int[50];
     int dy = -5;
-    int[][] color_values = new int[100][3];
+    int[][] color_values = new int[50][3];
     Random rand = new Random();
     int generate = 0;
     int counter = 0;
@@ -51,8 +51,6 @@ public class DrawView extends View {
         } else if (generate >= 2) {
             for (int i = 0; i < pos_x.length; i++) {
                 radius[i] = generate * 2;
-                // changes the color of the painter to random color
-                painter.setARGB(255, color_values[i][0], color_values[i][1], color_values[i][2]);
             }
         }
 
@@ -62,6 +60,9 @@ public class DrawView extends View {
             int y = pos_y[counter];
             int rad = radius[counter];
 
+            if (generate >= 2)
+                // changes the color of the painter to random color
+                painter.setARGB(255, color_values[counter][0], color_values[counter][1], color_values[counter][2]);
             canvas.drawCircle(x, y, rad, painter);
 
             pos_y[counter] = y + dy;
