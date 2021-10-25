@@ -1,142 +1,104 @@
 package com.singhjawand.balls;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+
 import androidx.annotation.NonNull;
 
+import java.util.Random;
+
 public class Circle {
-    public int left, top, right, bottom;
-    public int centerX, centerY;
+    public int dx, dy;
+    public int x, y;
+    public int radius;
+    Random rand = new Random();
 
     public Circle() {
-        left = top = right = bottom = 0;
-    }
+        this.dx = rand.nextInt(25) + 5;
+        this.dy = rand.nextInt(25) + 5;
 
-    public Circle(Circle circle) {
-        if (circle == null) {
-            left = top = right = bottom = 0;
-        } else {
-            left = circle.left;
-            top = circle.top;
-            right = circle.right;
-            bottom = circle.bottom;
-        }
-    }
-
-    public Circle(int left, int top, int right, int bottom) {
-        this.left = left;
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
+        this.radius = rand.nextInt(150) + 25;
+        this.x = rand.nextInt(100) + 50;
+        this.y = rand.nextInt(500) + 100;
     }
 
     public Circle(int x, int y, int rad) {
-        this.left = x - rad;
-        this.right = x + rad;
-        this.bottom = y + rad;
-        this.top = y - rad;
+        this.dx = rand.nextInt(10) - 5;
+        this.dy = rand.nextInt(10) - 5;
+
+        this.radius = rad;
+        this.x = x;
+        this.y = y;
     }
 
-    public double centerX() {
-        return (left + right) * 0.5;
+    public void drawCircle(Canvas canvas, int r, int g, int b) {
+        Paint painter = new Paint();
+        painter.setARGB(255, r, g, b);
+        canvas.drawCircle(x, y, radius, painter);
     }
 
-    public double centerY() {
-        return (top + bottom) * 0.5;
+    public void drawCircle(Canvas canvas){
+        Paint painter = new Paint();
+        painter.setARGB(255, rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
+        canvas.drawCircle(x, y, radius, painter);
     }
 
-    public double getWidth() {
-        return right - left;
-    }
-
-    public double getHeight() {
-        return bottom - top;
-    }
 
     @NonNull
     public String toString() {
-        return "RectF(" + left + ", " + top + ", " + right + ", " + bottom + ")";
+        return "Circle(" + x + ", " + y + ", " + radius + ")";
     }
 
-    public void set(int left, int top, int right, int bottom) {
-        this.left = left;
-        this.top = top;
-        this.right = right;
-        this.bottom = bottom;
-    }
 
     public void set(int x, int y, int rad) {
-        this.left = x - rad;
-        this.right = x + rad;
-        this.bottom = y + rad;
-        this.top = y - rad;
+        this.x = x;
+        this.y = y;
+        this.radius = rad;
     }
 
     public void setCenterX(int x) {
-        centerX = x;
+        this.x = x;
     }
 
     public void setCenterY(int y) {
-        centerY = y;
+        this.y = y;
     }
 
-    public void set(Circle src) {
-        this.left = src.left;
-        this.top = src.top;
-        this.right = src.right;
-        this.bottom = src.bottom;
+
+    public void offset(int dx, int dy) {
+        x += dy;
+        y += dy;
     }
 
-    public void setEmpty() {
-        left = 0;
-        top = 0;
-        right = 0;
-        bottom = 0;
+    public void offset() {
+        x += dx;
+        y += dy;
     }
 
-    public void offset(double dx, double dy) {
-
-        left += dx;
-        top += dy;
-        right += dx;
-        bottom += dy;
+    public void checkBounds(Canvas canvas) {
+        if (x > canvas.getWidth() || x < 0) {
+            dx *= -1;
+            x += dx;
+        }
+        if (y > canvas.getHeight() || y < 0) {
+            dy *= -1;
+            y += dy;
+        }
     }
 
-    public void offsetTo(int newLeft, int newTop) {
+    public void changeMotion(){
+        if (dx < 0)
+            dx -= rand.nextInt(5);
+        else
+            dx += rand.nextInt(5);
 
-        right += newLeft - left;
-        bottom += newTop - top;
-        left = newLeft;
-        top = newTop;
-    }
+        if (dy < 0)
+            dy -= rand.nextInt(5);
+        else
+            dy += rand.nextInt(5);
 
-    public boolean isEmpty() {
-        return left >= right || top >= bottom;
-    }
-
-    public boolean intersects(float left, float top, float right, float bottom) {
-        if (isEmpty())
-            return false;
-        return this.right > left && this.left < right && this.top < bottom && this.bottom > top;
-
-    }
-
-    public boolean intersects(Circle r) {
-        if (r == null || isEmpty())
-            return false;
-        return this.right > r.left && this.left < r.right && this.top < r.bottom && this.bottom > r.top;
-    }
-
-    public boolean contains(double x, double y) {
-
-        return !isEmpty() && x >= left && x < right && y >= top && y < bottom;
-    }
-
-    public boolean contains(double left, double top, double right, double bottom) {
-
-        return !isEmpty() && this.left <= left && this.top <= top && this.right >= right && this.bottom >= bottom;
-    }
-
-    public boolean contains(Circle r) {
-        return !isEmpty() && left <= r.left && top <= r.top && right >= r.right && bottom >= r.bottom;
+        radius -= 1;
     }
 
 

@@ -41,10 +41,7 @@ public class DrawView extends View {
         if (generate == 0) {
             for (int i = 0; i < balls.length; i++) {
                 balls[i] = new Circle(pos_x[i], pos_y[i], radius[i]);
-
-                color_values[i][0] = rand.nextInt(255);
-                color_values[i][1] = rand.nextInt(255);
-                color_values[i][2] = rand.nextInt(255);
+                
             }
             painter.setARGB(255, 212, 170, 30);
             generate = 1;
@@ -58,24 +55,20 @@ public class DrawView extends View {
             // changes the color of the painter
             int[] colors = color_values[counter];
             painter.setARGB(250, colors[0], colors[1], colors[2]);
-            Circle current = balls[counter];
-
+            int x = pos_x[counter];
+            int y = pos_y[counter];
             int dy = dy_vals[counter];
-
-            canvas.drawCircle(current.centerX, current.centerY, current.radius, painter);
-            current.top += dy;
-            current.bottom += dy;
-
-            if (current.bottom > getHeight()) {
+            int rad = radius[counter];
+            canvas.drawCircle(x, y, rad, painter);
+            pos_y[counter] = y + dy;
+            if (y > getHeight()) {
                 dy_vals[counter] = (int) (dy * 0.9 * -1);
                 // change to 0.8 to have ball less distance every time
-                current.bottom = getBottom();
-                current.top = current.bottom - current.radius;
-            } else if (current.centerY < 0) {
+                pos_y[counter] = getBottom();
+            } else if (y < 0) {
                 if (dy < 0)
                     dy_vals[counter] = dy * -1;
-                current.top = getTop();
-                current.bottom = current.top - current.radius;
+                pos_y[counter] = getTop();
             } else {
                 dy_vals[counter] = (int) (dy + gravity);
             }
@@ -122,7 +115,7 @@ public class DrawView extends View {
 
 class Circle {
     public double left, top, right, bottom;
-    public int centerX, centerY, radius;
+    public int centerX, centerY;
 
     public Circle() {
         left = top = right = bottom = 0;
@@ -140,7 +133,6 @@ class Circle {
         right = x + rad;
         bottom = y + rad;
         top = y - rad;
-        radius = rad;
     }
 
     public double centerX() {

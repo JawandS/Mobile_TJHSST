@@ -16,7 +16,10 @@ import androidx.annotation.Nullable;
 import java.util.Random;
 
 public class DrawView extends View{
-    private final Paint painter = new Paint();
+    Random rand = new Random();
+    Paint painter = new Paint();
+    Circle circle = new Circle();
+    Circle circle_two = new Circle();
 
     @SuppressLint("DrawAllocation")
     public DrawView(Context context, @Nullable AttributeSet attrs) {
@@ -25,13 +28,24 @@ public class DrawView extends View{
 
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawCircle(10, 10, 10, painter);
+        painter.setARGB(255, 100, 200, 255);
+        circle.drawCircle(canvas);
+        circle.offset();
+        circle.checkBounds(canvas);
 
+        circle_two.drawCircle(canvas);
+        circle_two.offset();
+        circle_two.checkBounds(canvas);
 
+        invalidate();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public boolean onTouchEvent(MotionEvent event) {
-
+        if(event.getAction() == MotionEvent.ACTION_DOWN){
+            circle.changeMotion();
+            circle_two.changeMotion();
+        }
         return super.onTouchEvent(event);
     }
 
