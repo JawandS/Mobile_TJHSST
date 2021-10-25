@@ -15,7 +15,7 @@ import androidx.annotation.Nullable;
 
 import java.util.Random;
 
-public class DrawView {
+public class DrawView extends View{
     private final Paint painter = new Paint();
 
     @SuppressLint("DrawAllocation")
