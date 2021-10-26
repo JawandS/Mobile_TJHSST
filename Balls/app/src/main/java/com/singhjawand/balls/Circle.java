@@ -24,7 +24,7 @@ public class Circle {
         this.dy = rand.nextInt(12) + 2;
 
 //        this.radius = rand.nextInt(150) + 25;
-        this.radius = 100;
+        this.radius = 55;
         this.x = rand.nextInt(300) + 50;
         this.y = rand.nextInt(1000) + 50;
     }
@@ -121,6 +121,7 @@ class Circles {
 
     public void cycle(Canvas canvas, int count) {
         for (Circle circle : circles) {
+
             circle.drawCircle(canvas);
             circle.offset();
             circle.checkBounds(canvas);
@@ -138,14 +139,32 @@ class Circles {
         }
     }
 
+    public void removeCircle(Circle circle){
+        int index = 0;
+        for (int i = 0; i < circles.length; i++)
+            if (circles[i] == circle)
+                index = i;
+        Circle[] temp = new Circle[circles.length - 1];
+        for (int i = 0; i < circles.length; i++) {
+            if (i != index) {
+                temp[i - 1] = circles[i];
+                break;
+            }
+        }
+        circles = temp;
+    }
+
     public void detectTap(int posx, int posy, Context context) {
         for (Circle c : circles) {
+
 //            System.out.println("Testing:" + posx +":"+c.toString());
-            if ( posx > c.x - c.radius - 30 && posx < c.x + c.radius + 30 && posy > c.y - c.radius - 30 && posy < c.y + c.radius + 30) {
+            if (posx > c.x - c.radius - 30 && posx < c.x + c.radius + 30 && posy > c.y - c.radius - 30 && posy < c.y + c.radius + 30) {
                 final MediaPlayer mp = MediaPlayer.create(context, R.raw.sound);
                 mp.start();
-//                c.radius = 500;
             }
+
+            removeCircle(c);
+
         }
     }
 
