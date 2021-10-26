@@ -1,8 +1,10 @@
 package com.singhjawand.balls;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 
 import androidx.annotation.NonNull;
 
@@ -18,12 +20,13 @@ public class Circle {
     public int b = rand.nextInt(255);
 
     public Circle() {
-        this.dx = rand.nextInt(25) + 5;
-        this.dy = rand.nextInt(25) + 5;
+        this.dx = rand.nextInt(12) + 2;
+        this.dy = rand.nextInt(12) + 2;
 
-        this.radius = rand.nextInt(150) + 25;
-        this.x = rand.nextInt(100) + 50;
-        this.y = rand.nextInt(500) + 100;
+//        this.radius = rand.nextInt(150) + 25;
+        this.radius = 100;
+        this.x = rand.nextInt(300) + 50;
+        this.y = rand.nextInt(1000) + 50;
     }
 
     public Circle(int x, int y, int rad) {
@@ -60,19 +63,6 @@ public class Circle {
         this.radius = rad;
     }
 
-    public void setCenterX(int x) {
-        this.x = x;
-    }
-
-    public void setCenterY(int y) {
-        this.y = y;
-    }
-
-
-    public void offset(int dx, int dy) {
-        x += dy;
-        y += dy;
-    }
 
     public void offset() {
         x += dx;
@@ -80,28 +70,39 @@ public class Circle {
     }
 
     public void checkBounds(Canvas canvas) {
-        if (x > canvas.getWidth() || x < 0) {
+        if (x > canvas.getWidth()) {
             dx *= -1;
+            x = canvas.getWidth();
+            x += dx;
+        } else if (x < 0) {
+            dx *= -1;
+            x = 0;
             x += dx;
         }
-        if (y > canvas.getHeight() || y < 0) {
+        if (y > canvas.getHeight()) {
             dy *= -1;
+            y = canvas.getHeight();
+            y += dy;
+        } else if (y < 0) {
+            dy *= -1;
+            y = 0;
             y += dy;
         }
     }
 
-    public void changeMotion() {
-        if (dx < 0)
-            dx -= rand.nextInt(5);
-        else
-            dx += rand.nextInt(5);
-
-        if (dy < 0)
-            dy -= rand.nextInt(5);
-        else
-            dy += rand.nextInt(5);
-
-        radius -= 1;
+    public void collision(Circle c) {
+        if (x > c.x - c.radius + 5 && x < c.x + c.radius - 5) {
+            dx *= -1;
+            x += dx;
+            c.dx *= -1;
+            c.x += c.dx;
+        }
+        if (y > c.y - c.radius + 5 && y < c.y + c.radius - 5) {
+            dy *= -1;
+            y += dy;
+            c.dy *= -1;
+            c.y += c.dy;
+        }
     }
 
 
@@ -118,19 +119,33 @@ class Circles {
         }
     }
 
-    public void cycle(Canvas canvas) {
+    public void cycle(Canvas canvas, int count) {
         for (Circle circle : circles) {
             circle.drawCircle(canvas);
             circle.offset();
             circle.checkBounds(canvas);
+            if (count % 10 == 0)
+                for (int i = 1; i < circles.length; i++)
+                    circle.collision(circles[i]);
         }
     }
 
-    public void changeColors(){
+    public void changeColors() {
         for (Circle circle : circles) {
             circle.r = rand.nextInt(255);
             circle.g = rand.nextInt(255);
             circle.b = rand.nextInt(255);
+        }
+    }
+
+    public void detectTap(int posx, int posy, Context context) {
+        for (Circle c : circles) {
+//            System.out.println("Testing:" + posx +":"+c.toString());
+            if ( posx > c.x - c.radius - 30 && posx < c.x + c.radius + 30 && posy > c.y - c.radius - 30 && posy < c.y + c.radius + 30) {
+                final MediaPlayer mp = MediaPlayer.create(context, R.raw.sound);
+                mp.start();
+//                c.radius = 500;
+            }
         }
     }
 
