@@ -13,6 +13,9 @@ public class Circle {
     public int x, y;
     public int radius;
     Random rand = new Random();
+    public int r = rand.nextInt(255);
+    public int g = rand.nextInt(255);
+    public int b = rand.nextInt(255);
 
     public Circle() {
         this.dx = rand.nextInt(25) + 5;
@@ -38,9 +41,9 @@ public class Circle {
         canvas.drawCircle(x, y, radius, painter);
     }
 
-    public void drawCircle(Canvas canvas){
+    public void drawCircle(Canvas canvas) {
         Paint painter = new Paint();
-        painter.setARGB(255, rand.nextInt(255), rand.nextInt(255), rand.nextInt(255));
+        painter.setARGB(255, r, g, b);
         canvas.drawCircle(x, y, radius, painter);
     }
 
@@ -87,7 +90,7 @@ public class Circle {
         }
     }
 
-    public void changeMotion(){
+    public void changeMotion() {
         if (dx < 0)
             dx -= rand.nextInt(5);
         else
@@ -101,6 +104,35 @@ public class Circle {
         radius -= 1;
     }
 
+
+}
+
+class Circles {
+    Random rand = new Random();
+    Circle[] circles;
+
+    public Circles(int number) {
+        circles = new Circle[number];
+        for (int x = 0; x < number; x++) {
+            circles[x] = new Circle();
+        }
+    }
+
+    public void cycle(Canvas canvas) {
+        for (Circle circle : circles) {
+            circle.drawCircle(canvas);
+            circle.offset();
+            circle.checkBounds(canvas);
+        }
+    }
+
+    public void changeColors(){
+        for (Circle circle : circles) {
+            circle.r = rand.nextInt(255);
+            circle.g = rand.nextInt(255);
+            circle.b = rand.nextInt(255);
+        }
+    }
 
 }
 
