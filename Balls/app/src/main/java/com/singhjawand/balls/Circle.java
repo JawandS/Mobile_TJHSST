@@ -91,19 +91,23 @@ public class Circle {
         }
     }
 
-    public void collision(Circle c) {
+    public boolean collision(Circle c) {
+        boolean toRet = false;
         if (x > c.x - c.radius + 5 && x < c.x + c.radius - 5) {
             dx *= -1;
             x += dx;
             c.dx *= -1;
             c.x += c.dx;
+            toRet = true;
         }
         if (y > c.y - c.radius + 5 && y < c.y + c.radius - 5) {
             dy *= -1;
             y += dy;
             c.dy *= -1;
             c.y += c.dy;
+            toRet = true;
         }
+        return toRet;
     }
 
 
@@ -120,15 +124,23 @@ class Circles {
     }
 
     public void cycle(Canvas canvas, int count) {
+        ArrayList<Circle> toAdd = new ArrayList<>();
         for (Circle circle : circles) {
-
             circle.drawCircle(canvas);
             circle.offset();
             circle.checkBounds(canvas);
-            if (count % 10 == 0)
+            if (count % 8 == 0)
                 for (int i = 1; i < circles.size(); i++)
-                    circle.collision(circles.get(i));
+                    if (circle.collision(circles.get(i)))
+                        if (rand.nextInt(100) == 1)
+                            toAdd.add(circle);
         }
+
+        for (Circle add : toAdd)
+            if (circles.size() < 10)
+                circles.add(new Circle(add.x + rand.nextInt(15) - 7, add.y + rand.nextInt(15) - 7, add.radius));
+
+
     }
 
     public void changeColors() {
@@ -149,8 +161,9 @@ class Circles {
                 toRem.add(c);
             }
         }
-        for (Circle rem : toRem)
+        for (Circle rem : toRem) {
             circles.remove(rem);
+        }
     }
 
 }
