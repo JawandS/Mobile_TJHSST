@@ -91,19 +91,23 @@ public class Circle {
         }
     }
 
-    public void collision(Circle c) {
+    public boolean collision(Circle c) {
+       boolean toRet = false;
         if (x > c.x - c.radius + 5 && x < c.x + c.radius - 5) {
             dx *= -1;
             x += dx;
             c.dx *= -1;
             c.x += c.dx;
+            toRet = true;
         }
         if (y > c.y - c.radius + 5 && y < c.y + c.radius - 5) {
             dy *= -1;
             y += dy;
             c.dy *= -1;
             c.y += c.dy;
+            toRet = true;
         }
+        return toRet;
     }
 
 
@@ -111,9 +115,10 @@ public class Circle {
 
 class Circles {
     Random rand = new Random();
-    ArrayList<Circle> circles = new ArrayList<>();
+    ArrayList<Circle> circles;
 
     public Circles(int number) {
+        circles = new ArrayList<Circle>();
         for (int x = 0; x < number; x++) {
             circles.add(new Circle());
         }
@@ -126,8 +131,18 @@ class Circles {
             circle.offset();
             circle.checkBounds(canvas);
             if (count % 10 == 0)
-                for (int i = 1; i < circles.size(); i++)
-                    circle.collision(circles.get(i));
+                for (int i = 1; i < circles.size(); i++) {
+//                    circle.collision(circles.get(i));
+                    if (circle.collision(circles.get(i))){
+                        try {
+                            circles.add(new Circle(circle.x, circle.y, circle.radius - 2));
+//                            circle.radius -= 1;
+//                            circles.get(i).radius -= 1;
+                        }catch (Exception e){
+                            System.out.println("ERROR: " + e);
+                        }
+                    }
+                }
         }
     }
 
@@ -141,16 +156,18 @@ class Circles {
 
 
     public void detectTap(int posx, int posy, Context context) {
-        ArrayList<Circle> toRem = new ArrayList<>();
+        ArrayList<Circle> toRemove = new ArrayList<Circle>();
         for (Circle c : circles) {
+//            System.out.println("Testing:" + posx +":"+c.toString());
             if (posx > c.x - c.radius - 30 && posx < c.x + c.radius + 30 && posy > c.y - c.radius - 30 && posy < c.y + c.radius + 30) {
                 final MediaPlayer mp = MediaPlayer.create(context, R.raw.sound);
                 mp.start();
-                toRem.add(c);
+                toRemove.add(c);
             }
         }
-        for (Circle rem : toRem)
-            circles.remove(rem);
+        if(!toRemove.isEmpty())
+            for(Circle rem : toRemove)
+                circles.remove(rem);
     }
 
 }
