@@ -1,10 +1,12 @@
 package com.singhjawand.balls;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
@@ -116,13 +118,14 @@ public class Circle {
 class Circles {
     Random rand = new Random();
     ArrayList<Circle> circles = new ArrayList<>();
+    int number = 0;
 
     public Circles(int number) {
-        for (int x = 0; x < number; x++) {
+        for (int x = 0; x < number; x++)
             circles.add(new Circle());
-        }
     }
 
+    @SuppressLint("SetTextI18n")
     public void cycle(Canvas canvas, int count) {
         ArrayList<Circle> toAdd = new ArrayList<>();
         for (Circle circle : circles) {
@@ -132,14 +135,18 @@ class Circles {
             if (count % 8 == 0)
                 for (int i = 1; i < circles.size(); i++)
                     if (circle.collision(circles.get(i)))
-                        if (rand.nextInt(100) == 1)
+                        if (rand.nextInt(3) == 1)
                             toAdd.add(circle);
         }
 
         for (Circle add : toAdd)
-            if (circles.size() < 10)
+            if (circles.size() < 7)
                 circles.add(new Circle(add.x + rand.nextInt(15) - 7, add.y + rand.nextInt(15) - 7, add.radius));
 
+        Paint painter = new Paint();
+        painter.setTextSize(100);
+        painter.setARGB(255, 255, 255, 255);
+        canvas.drawText(number + "", (int) (canvas.getWidth() / 2.0), 200, painter);
 
     }
 
@@ -162,6 +169,7 @@ class Circles {
             }
         }
         for (Circle rem : toRem) {
+            number += 1;
             circles.remove(rem);
         }
     }

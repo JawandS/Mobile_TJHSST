@@ -10,15 +10,17 @@ import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 
 import java.util.Random;
 
 public class DrawView extends View {
     int count = 0;
     Paint painter = new Paint();
-    Circles balls = new Circles(6);
+    Circles balls;
 
     @SuppressLint("DrawAllocation")
     public DrawView(Context context, @Nullable AttributeSet attrs) {
@@ -34,6 +36,14 @@ public class DrawView extends View {
         invalidate();
     }
 
+    @SuppressLint("DrawAllocation")
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+//        TextView textView = ((ConstraintLayout)(this.getParent())).findViewById(R.id.counter);
+        balls = new Circles(6);
+    }
+
     @SuppressLint("ClickableViewAccessibility")
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -45,8 +55,3 @@ public class DrawView extends View {
 
 }
 
-//    final MediaPlayer mp = MediaPlayer.create(getContext().getApplicationContext(), R.raw.stop);
-//        mp.start();
-
-//            circle.changeMotion();
-//            circle_two.changeMotion();
