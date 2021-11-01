@@ -126,11 +126,13 @@ class Circles {
     Random rand = new Random();
     ArrayList<Circle> circles = new ArrayList<>();
     int number = 0;
+    int max;
     Drawable explosion;
 
     public Circles(int number) {
         for (int x = 0; x < number; x++)
             circles.add(new Circle());
+        max = number;
     }
 
     @SuppressLint("SetTextI18n")
@@ -193,6 +195,14 @@ class Circles {
             number += 1;
             circles.remove(rem);
         }
+
+        if(circles.isEmpty()){
+            max++;
+            for(int i = 0; i < max; i++)
+                circles.add(new Circle());
+            number /= 2;
+        }
+
     }
 
 }
