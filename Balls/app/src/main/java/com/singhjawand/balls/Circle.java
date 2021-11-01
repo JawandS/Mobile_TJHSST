@@ -2,13 +2,20 @@ package com.singhjawand.balls;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Picture;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -27,7 +34,7 @@ public class Circle {
         this.dy = rand.nextInt(12) + 2;
 
 //        this.radius = rand.nextInt(150) + 25;
-        this.radius = 55;
+        this.radius = 60;
         this.x = rand.nextInt(300) + 50;
         this.y = rand.nextInt(1000) + 50;
     }
@@ -119,6 +126,7 @@ class Circles {
     Random rand = new Random();
     ArrayList<Circle> circles = new ArrayList<>();
     int number = 0;
+    Drawable explosion;
 
     public Circles(int number) {
         for (int x = 0; x < number; x++)
@@ -135,8 +143,7 @@ class Circles {
             if (count % 8 == 0)
                 for (int i = 1; i < circles.size(); i++)
                     if (circle.collision(circles.get(i)))
-                        if (rand.nextInt(3) == 1)
-                            toAdd.add(circle);
+                        toAdd.add(circle);
         }
 
         for (Circle add : toAdd)
@@ -158,17 +165,31 @@ class Circles {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    public void explode(Canvas canvas, Circle toEx) {
+        Rect bounds = new Rect(0, 0, explosion.getMinimumWidth() / 5, explosion.getMinimumHeight() / 4);
+        explosion.setBounds(bounds);
+        explosion.draw(canvas);
+    }
 
-    public void detectTap(int posx, int posy, Context context) {
+    @RequiresApi(api = Build.VERSION_CODES.P)
+    @SuppressLint("UseCompatLoadingForDrawables")
+    public void detectTap(int posx, int posy, Context context, Canvas canvas) {
         ArrayList<Circle> toRem = new ArrayList<>();
         for (Circle c : circles) {
             if (posx > c.x - c.radius - 30 && posx < c.x + c.radius + 30 && posy > c.y - c.radius - 30 && posy < c.y + c.radius + 30) {
-                final MediaPlayer mp = MediaPlayer.create(context, R.raw.sound);
+                //  random sounds, sound: Connor, sound1: oof, sound2: siren, sound3: error
+                // excluded: R.raw.sound, , R.raw.sound2
+                int[] sounds = {R.raw.sound1, R.raw.sound3};
+                // windows error sound
+                final MediaPlayer mp = MediaPlayer.create(context, sounds[rand.nextInt(sounds.length)]);
                 mp.start();
                 toRem.add(c);
             }
         }
         for (Circle rem : toRem) {
+            explosion = context.getResources().getDrawable(R.drawable.explosion);
+            explode(canvas, rem);
             number += 1;
             circles.remove(rem);
         }
