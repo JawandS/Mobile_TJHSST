@@ -3,6 +3,7 @@ package com.singhjawand.lab09;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -16,8 +17,10 @@ public class DrawView extends View {
         super(context, attrs);
     }
 
+    @SuppressLint("DrawAllocation")
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
 
         character.animate(canvas);
 
