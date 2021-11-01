@@ -46,7 +46,7 @@ public class DrawView extends View {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
 //        TextView textView = ((ConstraintLayout)(this.getParent())).findViewById(R.id.counter);
-        balls = new Circles(6);
+        balls = new Circles(1);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)

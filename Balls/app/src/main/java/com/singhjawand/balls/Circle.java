@@ -2,17 +2,12 @@ package com.singhjawand.balls;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Picture;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -102,14 +97,14 @@ public class Circle {
 
     public boolean collision(Circle c) {
         boolean toRet = false;
-        if (x > c.x - c.radius + 5 && x < c.x + c.radius - 5) {
+        if (x > c.x - c.radius && x < c.x + c.radius) {
             dx *= -1;
             x += dx;
             c.dx *= -1;
             c.x += c.dx;
             toRet = true;
         }
-        if (y > c.y - c.radius + 5 && y < c.y + c.radius - 5) {
+        if (y > c.y - c.radius && y < c.y + c.radius) {
             dy *= -1;
             y += dy;
             c.dy *= -1;
@@ -125,7 +120,8 @@ public class Circle {
 class Circles {
     Random rand = new Random();
     ArrayList<Circle> circles = new ArrayList<>();
-    int number = 0;
+    int total_clicks = 1;
+    int hits = 1;
     int max;
     Drawable explosion;
 
@@ -137,6 +133,15 @@ class Circles {
 
     @SuppressLint("SetTextI18n")
     public void cycle(Canvas canvas, int count) {
+
+        if (total_clicks >= 100) {
+            Paint painter = new Paint();
+            painter.setTextSize(100);
+            painter.setARGB(255, 255, 255, 255);
+            canvas.drawText(hits + "%", (int) (canvas.getWidth() / 2.0) - 50, 200, painter);
+            return;
+        }
+
         ArrayList<Circle> toAdd = new ArrayList<>();
         for (Circle circle : circles) {
             circle.drawCircle(canvas);
@@ -149,17 +154,18 @@ class Circles {
         }
 
         for (Circle add : toAdd)
-            if (circles.size() < 7)
+            if (circles.size() < max)
                 circles.add(new Circle(add.x + rand.nextInt(15) - 7, add.y + rand.nextInt(15) - 7, add.radius));
 
         Paint painter = new Paint();
         painter.setTextSize(100);
         painter.setARGB(255, 255, 255, 255);
-        canvas.drawText(number + "", (int) (canvas.getWidth() / 2.0), 200, painter);
-
+//        int percent_acc = (int) (((hits / total_clicks) / 100.0) * 10000);
+        canvas.drawText(hits + " / " + total_clicks, (int) (canvas.getWidth() / 2.0) - 50, 200, painter);
     }
 
     public void changeColors() {
+        total_clicks++;
         for (Circle circle : circles) {
             circle.r = rand.nextInt(255);
             circle.g = rand.nextInt(255);
@@ -170,7 +176,7 @@ class Circles {
     @RequiresApi(api = Build.VERSION_CODES.P)
     public void explode(Canvas canvas, Circle toEx) {
         Rect bounds = new Rect(0, 0, explosion.getMinimumWidth() / 5, explosion.getMinimumHeight() / 4);
-        explosion.setBounds(bounds);
+//        explosion.setBounds(bounds);
         explosion.draw(canvas);
     }
 
@@ -192,15 +198,14 @@ class Circles {
         for (Circle rem : toRem) {
             explosion = context.getResources().getDrawable(R.drawable.explosion);
             explode(canvas, rem);
-            number += 1;
+            hits++;
             circles.remove(rem);
         }
 
-        if(circles.isEmpty()){
+        if (circles.isEmpty()) {
             max++;
-            for(int i = 0; i < max; i++)
+            for (int i = 0; i < max; i++)
                 circles.add(new Circle());
-            number /= 2;
         }
 
     }
