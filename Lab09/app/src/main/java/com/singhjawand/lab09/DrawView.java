@@ -10,7 +10,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 
 public class DrawView extends View {
-    Sprite sprite = new Sprite();
+    Sprite sprite = null;
     Paint paint = new Paint();
 
     public DrawView(Context context, @Nullable AttributeSet attrs) {
@@ -18,8 +18,16 @@ public class DrawView extends View {
     }
 
     @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (sprite == null)
+            sprite = new Sprite(canvas);
 
         paint.setColor(Color.GRAY);
         //paint background gray
