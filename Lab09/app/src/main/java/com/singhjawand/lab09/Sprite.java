@@ -1,57 +1,66 @@
 package com.singhjawand.lab09;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 
 import java.util.Random;
 
-public class Sprite {
-    Drawable image;
-    Random random = new Random();
-    int dx, dy;
-    int x, y;
-    int w, h;
+class Sprite extends RectF {
+    private int dX, dY, color;
 
-    public Sprite(int width, int height){
-        dx = random.nextInt(10) - 5;
-        dy = random.nextInt(10) - 5;
-
-        w = 25;
-        h = 50;
-
-        x = random.nextInt(width - w) + 5;
-        x = random.nextInt(height - h) + 5;
-
+    public Sprite() {
+        this(1, 2, Color.RED);
     }
 
-    public void checkBounds(Canvas canvas){
-        if (x > canvas.getWidth()) {
-            dx *= -1;
-            x = canvas.getWidth();
-            x += dx;
-        } else if (x < 0) {
-            dx *= -1;
-            x = 0;
-            x += dx;
-        }
-        if (y > canvas.getHeight()) {
-            dy *= -1;
-            y = canvas.getHeight();
-            y += dy;
-        } else if (y < 0) {
-            dy *= -1;
-            y = 0;
-            y += dy;
-        }
+    public Sprite(int dX, int dY, int color) {
+        this(1, 1, 11, 11, dX, dY, color);
     }
 
-    public void animate(Canvas canvas){
-        checkBounds(canvas);
-        x += x;
-        y += dy;
-
-        // TO DO: DRAW IMAGE USING BITMAP
+    public Sprite(float left, float top, float right, float bottom) {
+        this(left, top, right, bottom, 1, 2, Color.RED);
     }
 
+    public Sprite(float left, float top, float right, float bottom, int dX, int dY, int color) {
+        super(left, top, right, bottom);
+        this.dX = dX;
+        this.dY = dY;
+        this.color = color;
+    }
+
+    public void update() {
+        offset(dX, dY);//moves dX to the right and dY downwards
+    }
+
+    public void draw(Canvas canvas) {
+        Paint paint = new Paint();
+        paint.setColor(color);//sets its color
+        canvas.drawCircle(centerX(), centerY(), width() / 2, paint);//draws circle
+    }
+
+    public int getdX() {
+        return dX;
+    }
+
+    public void setdX(int dX) {
+        this.dX = dX;
+    }
+
+    public int getdY() {
+        return dY;
+    }
+
+    public void setdY(int dY) {
+        this.dY = dY;
+    }
+
+    public int getColor() {
+        return color;
+    }
+
+    public void setColor(int color) {
+        this.color = color;
+    }
 }

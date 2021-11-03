@@ -2,6 +2,9 @@ package com.singhjawand.balls;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
@@ -175,9 +178,8 @@ class Circles {
 
     @RequiresApi(api = Build.VERSION_CODES.P)
     public void explode(Canvas canvas, Circle toEx) {
-        Rect bounds = new Rect(0, 0, explosion.getMinimumWidth() / 5, explosion.getMinimumHeight() / 4);
-//        explosion.setBounds(bounds);
-        explosion.draw(canvas);
+        Bitmap explode = BitmapFactory.decodeResource(Resources.getSystem(),R.drawable.explosion);
+        
     }
 
     @RequiresApi(api = Build.VERSION_CODES.P)
@@ -212,3 +214,6 @@ class Circles {
 
 }
 
+//        Rect bounds = new Rect(0, 0, explosion.getMinimumWidth() / 5, explosion.getMinimumHeight() / 4);
+//        explosion.setBounds(bounds);
+//        explosion.draw(canvas);
