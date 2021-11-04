@@ -1,5 +1,6 @@
 package com.singhjawand.lab09;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -13,15 +14,22 @@ class Sprite extends RectF {
     private int canvasWidth, canvasHeight;
 //    Random rand = new Random();
 
+    // BITMAP VARIABLES
+    private static final int BMP_COLUMNS = 4;
+    private static final int BMP_ROWS = 4;
+    private static final int DOWN = 0, LEFT = 1, RIGHT = 2, UP = 3;
+    private Bitmap bitmap;
+    private int currentFrame = 0, iconWidth, iconHeight;
+
     public Sprite(Canvas canvas) {
         this(1, 2, Color.RED);
-        canvasWidth = canvas.getWidth();
-        canvasHeight = canvas.getHeight();
+//        canvasWidth = canvas.getWidth();
+//        canvasHeight = canvas.getHeight();
 //        this(1, 2, Color.argb(255, rand.nextInt(255), rand.nextInt(255), rand.nextInt(255)));
     }
 
     public Sprite(int dX, int dY, int color) {
-        this(1, 1, 11, 11, dX, dY, color);
+        this(5, 1, 20, 20, dX, dY, color);
     }
 
     public Sprite(float left, float top, float right, float bottom) {
@@ -37,10 +45,9 @@ class Sprite extends RectF {
 
     public void update() {
         offset(dX, dY);//moves dX to the right and dY downwards
-        checkBounds();
     }
 
-    public void checkBounds() {
+    public void checkBounds(int canvasWidth, int canvasHeight) {
         int width = (int) width();
         int height = (int) height();
 
@@ -53,22 +60,33 @@ class Sprite extends RectF {
             left = 0;
             right = left + width;
         }
-        // fix to check bounds
+
         if (bottom > canvasHeight) {
-            dy *= -1;
-            y = canvas.getHeight();
-            y += dy;
-        } else if (y < 0) {
-            dy *= -1;
-            y = 0;
-            y += dy;
+            dY *= -1;
+            bottom = canvasHeight;
+            top = bottom - height;
+        } else if (top < 0) {
+            dY *= -1;
+            top = 0;
+            bottom = height;
         }
+    }
+
+    public void reverse() {
+        dX *= -1;
+        dY *= -1;
+        offset(dX, dY);
     }
 
     public void draw(Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(color);//sets its color
         canvas.drawCircle(centerX(), centerY(), width() / 2, paint);//draws circle
+    }
+
+    public void grow(int i) {
+        right = right + i;
+        bottom = bottom + i;
     }
 
     public int getdX() {
