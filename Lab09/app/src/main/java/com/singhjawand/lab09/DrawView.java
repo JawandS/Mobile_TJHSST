@@ -42,14 +42,14 @@ public class DrawView extends View {
             }
         }
 
-        paint.setColor(Color.BLACK);
-        //paint background gray
+        paint.setColor(Color.argb(255, clicks * 3, clicks * 3, clicks * 3));
+        //paint background black
         canvas.drawRect(getLeft(), 0, getRight(), getBottom(), paint);
-        paint.setColor(Color.RED);
+
 
         for (Sprite sprite : sprites) {
             // sprite updates itself
-            sprite.update();
+            sprite.update(canvas);
             // sprite checks the boundaries of the screen
             sprite.checkBounds(getWidth(), getHeight());
             // sprite draws itself
@@ -89,8 +89,8 @@ public class DrawView extends View {
     private Sprite generateSprite() {
         float x = (float) (Math.random() * (getWidth() - .1 * getWidth()));
         float y = (float) (Math.random() * (getHeight() - .1 * getHeight()));
-        int dX = (int) (Math.random() * 3 + (clicks / 5));
-        int dY = (int) (Math.random() * 3 + (clicks / 5));
+        int dX = (int) (Math.random() * 3 + (clicks / 3));
+        int dY = (int) (Math.random() * 3 + (clicks / 3));
 //        double size =  0.2 - (clicks / 100.0); makes the size smaller as more clicks
         float size = 0.15f;
         return new Sprite(x, y, (float) (x + size * getWidth()), (float) (y + size * getWidth()), dX, dY, Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));

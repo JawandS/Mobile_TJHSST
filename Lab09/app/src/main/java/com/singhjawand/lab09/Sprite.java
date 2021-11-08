@@ -44,11 +44,16 @@ class Sprite extends RectF {
         this.color = color;
     }
 
-    public void update() {
+    public void update(Canvas canvas) {
         if(animationDelay--<0) {//increment to next sprite image after delay
-            currentFrame = ++currentFrame % BMP_COLUMNS;//cycles current image with boundary proteciton
+            currentFrame = ++currentFrame % BMP_COLUMNS;//cycles current image with boundary protection
             animationDelay=20;//arbitrary delay before cycling to next image
         }
+        Paint paint = new Paint();
+        paint.setARGB(255, 225, 225, 0);
+        paint.setStrokeWidth(5);
+        Random rand = new Random();
+        canvas.drawLine(centerX(), centerY(), centerX() - (dX * rand.nextInt(150)), centerY() - (dY * rand.nextInt(150)), paint);
         offset(dX, dY);//moves dX to the right and dY downwards
     }
 

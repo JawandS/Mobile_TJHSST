@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void reset(View view) {
-        // RESET GAME use drawView.sprite.reset() when implemented
+        drawView.clicks = 0;
     }
 
 }
