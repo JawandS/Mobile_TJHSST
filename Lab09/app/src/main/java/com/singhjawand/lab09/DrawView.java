@@ -2,6 +2,7 @@ package com.singhjawand.lab09;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -9,16 +10,26 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-public class DrawView extends View {
+public class DrawView extends SurfaceView {
     ArrayList<Sprite> sprites = new ArrayList<>();
     Paint paint = new Paint();
     final int NUMBER = 3;
+
+    // ANIMATION VARIABLES
+    SurfaceHolder surface;
+    ArrayList<Explosion> explosions = new ArrayList<>();
+    Bitmap explosionBMP = BitmapFactory.decodeResource(getResources(), R.drawable.explosion);
+    Canvas canvas;
+    boolean isRunning = true;
+    int frames = 0;
 
     public DrawView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
@@ -37,7 +48,11 @@ public class DrawView extends View {
         if (sprites.isEmpty()) {
             for (int i = 0; i < NUMBER; i++) {
                 sprites.add(generateSprite());
-                sprites.get(i).setBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.bluejeans));
+                sprites.get(i).setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.bluejeans));
+            }
+
+            for (Explosion e : explosions) {//draw each explosion
+                e.draw(canvas);
             }
         }
 
@@ -58,6 +73,10 @@ public class DrawView extends View {
                     collision.reverse();
                     sprite.reverse();
                 }
+            // UPDATE EXPLOSIONS
+            for (int i = explosions.size() - 1; i >= 0; i--) {
+                explosions.get(i).update();
+            }
         }
         //redraws screen, invokes onDraw()
         invalidate();
@@ -68,8 +87,13 @@ public class DrawView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             for (int i = 0; i < sprites.size(); i++)
-                if (sprites.get(i).contains(event.getX(), event.getY()))
+                if (sprites.get(i).contains(event.getX(), event.getY())) {
+                    // ADD EXPLOSION
+                    new Explosion(sprites.get(i), explosions, explosionBMP);
+
                     sprites.set(i, generateSprite());
+                    sprites.get(i).setBitmap(BitmapFactory.decodeResource(getResources(), R.drawable.bluejeans));
+                }
         }
         return true;
     }
