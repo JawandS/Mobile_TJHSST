@@ -22,7 +22,7 @@ class Sprite extends RectF {
     private Bitmap bitmap;
     private int currentFrame = 0, iconWidth, iconHeight, animationDelay = 20;
 
-    public Sprite() {
+    public Sprite(Canvas canvas) {
         this(1, 2, Color.RED);
 //        canvasWidth = canvas.getWidth();
 //        canvasHeight = canvas.getHeight();
@@ -42,10 +42,6 @@ class Sprite extends RectF {
         this.dX = dX;
         this.dY = dY;
         this.color = color;
-    }
-
-    public Sprite(RectF r) {
-        super(r);
     }
 
     public void update() {
