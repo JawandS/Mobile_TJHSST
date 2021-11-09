@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void reset(View view) {
         drawView.clicks = 0;
+        drawView.reset();
     }
 
 }

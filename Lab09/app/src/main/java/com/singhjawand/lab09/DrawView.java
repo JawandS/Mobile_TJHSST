@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.media.MediaPlayer;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -81,16 +82,26 @@ public class DrawView extends View {
                     sprites.set(i, generateSprite());
                     sprites.get(i).setBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.bluejeans));
                     clicks++;
+
+                    final MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.connor);
+                    mp.start();
                 }
         }
         return true;
     }
 
+    public void reset(){
+        for(int i = 0; i < sprites.size(); i++){
+            sprites.set(i, generateSprite());
+            sprites.get(i).setBitmap(BitmapFactory.decodeResource(getResources(),R.drawable.bluejeans));
+        }
+    }
+
     private Sprite generateSprite() {
         float x = (float) (Math.random() * (getWidth() - .1 * getWidth()));
         float y = (float) (Math.random() * (getHeight() - .1 * getHeight()));
-        int dX = (int) (Math.random() * 3 + (clicks / 3));
-        int dY = (int) (Math.random() * 3 + (clicks / 3));
+        int dX = (int) (Math.random() * 3 + (clicks / 3)) + 1;
+        int dY = (int) (Math.random() * 3 + (clicks / 3)) + 1;
 //        double size =  0.2 - (clicks / 100.0); makes the size smaller as more clicks
         float size = 0.15f;
         return new Sprite(x, y, (float) (x + size * getWidth()), (float) (y + size * getWidth()), dX, dY, Color.rgb((int) (Math.random() * 255), (int) (Math.random() * 255), (int) (Math.random() * 255)));
