@@ -7,6 +7,7 @@ import android.annotation.SuppressLint;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,8 +39,21 @@ public class MainActivity extends AppCompatActivity {
         rand = new Random();
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN){
+            randomBackground();
+        }
+        return super.onTouchEvent(event);
+    }
+
     @SuppressLint("SetTextI18n")
     public void changeBackground(View view) {
+        changeBackground();
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void changeBackground(){
         r = Integer.parseInt(red.getText().toString());
         g = Integer.parseInt(green.getText().toString());
         b = Integer.parseInt(blue.getText().toString());
@@ -53,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void randomBackground(View view) {
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void randomBackground(){
         r = rand.nextInt(255);
         g = rand.nextInt(255);
         b = rand.nextInt(255);
