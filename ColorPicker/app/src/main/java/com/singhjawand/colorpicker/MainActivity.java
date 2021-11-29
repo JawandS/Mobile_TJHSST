@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -15,15 +18,17 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.android.material.slider.RangeSlider;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
-    EditText red, green, blue;
+    RangeSlider red, green, blue;
     TextView r_view, blue_view, g_view;
-    Button color_storage;
-    LinearLayout container;
+    LinearLayout color_storage;
     ConstraintLayout bg;
+    float r, g, b;
     ArrayList<ColorObject> colors = new ArrayList<>();
     Random rand;
 
@@ -33,16 +38,23 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         red = findViewById(R.id.red);
+        red.setValueFrom(0);
+        red.setValueTo(254);
+//        red.onTouchEvent()
+
         green = findViewById(R.id.green);
+        green.setValueFrom(0);
+        green.setValueTo(254);
+
         blue = findViewById(R.id.blue);
+        blue.setValueFrom(0);
+        blue.setValueTo(254);
 
         color_storage = findViewById(R.id.color_storage);
 
         r_view = findViewById(R.id.red_text);
         g_view = findViewById(R.id.green_text);
         blue_view = findViewById(R.id.blue_text);
-
-        container = findViewById(R.id.container);
 
         bg = findViewById(R.id.background);
 
@@ -62,21 +74,25 @@ public class MainActivity extends AppCompatActivity {
         changeBackground();
     }
 
+
     @SuppressLint("SetTextI18n")
     public void changeBackground(){
 
-        int r = Integer.parseInt(red.getText().toString());
-        int g = Integer.parseInt(green.getText().toString());
-        int b = Integer.parseInt(blue.getText().toString());
+        r = red.getValues().get(0);
+        red.setBackgroundColor(Color.rgb(r, 0, 0));
+        g = green.getValues().get(0);
+        green.setBackgroundColor(Color.rgb(0, g, 0));
+        b = blue.getValues().get(0);
+        blue.setBackgroundColor(Color.rgb(0, 0, b));
 
-        colors.add(new ColorObject(r, g, b));
-        update();
+//        colors.add(new ColorObject(r, g, b));
+//        update();
 
-        r_view.setText(r + "");
-        g_view.setText(g + "");
-        blue_view.setText(b + "");
-
-        bg.setBackgroundColor(Color.rgb(r, g, b));
+        r_view.setText((int) r + "");
+        g_view.setText((int) g + "");
+        blue_view.setText((int) b + "");
+System.out.println("Testing: "+r+","+g+","+b);
+        color_storage.setBackgroundColor(Color.rgb(r, g, b));
     }
 
     @SuppressLint("SetTextI18n")
@@ -88,31 +104,37 @@ public class MainActivity extends AppCompatActivity {
     public void randomBackground(){
         ColorObject c = new ColorObject();
         colors.add(c);
-        update();
 
-        int red = c.r;
-        int green = c.g;
-        int blue = c.b;
+        r = c.r;
+        g = c.g;
+        b = c.b;
 
-        r_view.setText(red + "");
-        g_view.setText(green + "");
-        blue_view.setText(blue + "");
+        red.setValues(r);
+        green.setValues(g);
+        blue.setValues(b);
 
-        color_storage.setBackgroundColor(Color.rgb(red, green, blue));
+        red.setBackgroundColor(Color.rgb(r, 0, 0));
+        green.setBackgroundColor(Color.rgb(0, g, 0));
+        blue.setBackgroundColor(Color.rgb(0, 0, b));
+
+        r_view.setText((int) r + "");
+        g_view.setText((int) g + "");
+        blue_view.setText((int) b + "");
+
+        color_storage.setBackgroundColor(Color.rgb(r, g, b));
     }
 
-    @SuppressLint("SetTextI18n")
-    public void update(){
-        ColorObject color = colors.get(colors.size() - 1);
-        TextView temp = new TextView(this);
-        color.setView(temp);
-
-        container.addView(temp);
+    public void copy(View view) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("RGB", (int) r + ", " + (int) g + ", " + (int) b);
+        clipboard.setPrimaryClip(clip);
     }
 }
 
+
+
 class ColorObject{
-    public int r, g, b;
+    public float r, g, b;
     Random rand = new Random();
 
     public ColorObject(){
@@ -129,7 +151,7 @@ class ColorObject{
 
     @SuppressLint("SetTextI18n")
     public void setView(TextView temp){
-        temp.setText(r + " " + g + " " + b);
+        temp.setText((int) r + " " + (int) g + " " + (int) b);
         temp.setTextSize(50);
         temp.setBackgroundColor(Color.rgb(r, g, b));
     }
