@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -25,21 +27,23 @@ import java.util.List;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
+    TextView textView;
+    TestVolleyRequest tester;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        BasicVolleyRequest basicRequest = new BasicVolleyRequest(this);
-//        basicRequest.volleyPost();
-        TestVolleyRequest tester = new TestVolleyRequest(this);
-        tester.volleyGetData();
+        tester = new TestVolleyRequest(this);
+        textView = findViewById(R.id.id0);
     }
 
 
-
-
+    public void request(View view) {
+        tester.volleyGetQuote(textView);
+//        textView.setText(returnString);
+    }
 }
 
 class TestVolleyRequest {
@@ -48,28 +52,24 @@ class TestVolleyRequest {
         this.context = context;
     }
 
-    public void volleyGetData(){
-        String url= "https://mw-demo.sites.tjhsst.edu/data";
+    public void volleyGetQuote(TextView view){
+        final String[] output = {"error"};
+        String url= "https://api.quotable.io/random";
         ArrayList<JSONObject> jsonResponses = new ArrayList<>();
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
-        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, url, null,
-                new Response.Listener<JSONArray>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONObject>() {
                     @Override
-                    public void onResponse(JSONArray response) {
+                    public void onResponse(JSONObject response) {
+                        String temp = "";
                         try {
-                            for(int i = 0; i < response.length(); i++){
-                                JSONObject jsonObject = response.getJSONObject(i);
-//                                System.out.print("Line 63: " + jsonObject);
-                                jsonResponses.add(jsonObject);
-                            }
+                            temp = response.getString("content");
                         } catch (JSONException e) {
-                            System.out.println("error");
+                            System.out.println("Error occurred in get quote");
                             e.printStackTrace();
                         }
-
-                        System.out.println("Line 81: " + jsonResponses.toString());
-
+                        view.setText(temp);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -80,6 +80,56 @@ class TestVolleyRequest {
 
         // executes request
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public void volleyGetData(TextView view){
+        String url= "https://mw-demo.sites.tjhsst.edu/data";
+        ArrayList<JSONObject> jsonResponses = new ArrayList<>();
+
+        RequestQueue requestQueue = Volley.newRequestQueue(context);
+        JsonArrayRequest jsonObjectRequest = new JsonArrayRequest(Request.Method.GET, url, null,
+                new Response.Listener<JSONArray>() {
+                    @Override
+                    public void onResponse(JSONArray response) {
+                        String category = "";
+                        System.out.println("before try");
+                        try {
+                            for(int i = 0; i < response.length(); i++){
+                                JSONObject jsonObject = response.getJSONObject(i);
+//                                System.out.print("Line 63: " + jsonObject);
+                                jsonResponses.add(jsonObject);
+                            }
+                        } catch (JSONException e) {
+                            System.out.println("error");
+                            e.printStackTrace();
+                        }
+                        System.out.println("Before for");
+                        for (JSONObject elem: jsonResponses) {
+                            System.out.println("Line 61 " + elem);
+                            try {
+                                String id = elem.getString("id");
+                                category = elem.getString("category");
+                                String increment = elem.getString("increment");
+                                String decrement = elem.getString("decrement");
+
+                                System.out.println("category: " + category);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        view.setText(category);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                error.printStackTrace();
+            }
+        });
+
+        // executes request
+        System.out.println("before request");
+        requestQueue.add(jsonObjectRequest);
+        System.out.println("after request");
 
 //        System.out.println("Line 81: " + jsonResponses.toString());
 //            System.out.println("Line 89" + jsonResponses.toString());

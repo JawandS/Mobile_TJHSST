@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Lab11</string>
+    <string name="example">Example</string>
+    <string name="increment">increment</string>
+    <string name="quotes">Quotes</string>
+    <string name="new_quote">New Quote</string>
+    <string name="click_to_get_quote">Click to Get Quote</string>
 </resources>

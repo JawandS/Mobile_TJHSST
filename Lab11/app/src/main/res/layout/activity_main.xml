@@ -4,15 +4,65 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:onClick="request"
     tools:context=".MainActivity">
 
-    <TextView
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:onClick="request"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/id0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:onClick="request"
+            android:text="@string/click_to_get_quote"
+            android:textColor="@color/white"
+            android:textSize="40sp" />
+
+    </ScrollView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintRight_toRightOf="parent"-->
+    <!--app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--app:layout_constraintBottom_toTopOf="parent"-->
+    <!--android:orientation="vertical"-->
+    <!--    >-->
+
+
+    <!--<TextView-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:id="@+id/category0"-->
+    <!--    android:text=""-->
+    <!--    />-->
+
+    <!--<TextView-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:id="@+id/increment0"-->
+    <!--    android:text=""-->
+    <!--    />-->
+
+    <!--<TextView-->
+    <!--    android:layout_width="wrap_content"-->
+    <!--    android:layout_height="wrap_content"-->
+    <!--    android:id="@+id/decrement0"-->
+    <!--    android:text="@string/example"-->
+    <!--    android:textSize="200sp"-->
+    <!--    android:textColor="@color/white"-->
+    <!--    />-->
+
+    <!--</LinearLayout>-->
