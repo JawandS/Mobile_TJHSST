@@ -1,3 +1,13 @@
 <resources>
-    <string name="app_name">Lab12 - Firebase</string>
+    <string name="app_name">Firebase</string>
+    <string name="new_user">New User</string>
+    <string name="email">Email</string>
+    <string name="returning_user">Returning User</string>
+    <string name="password">Password</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="log_in">Log In</string>
+    <string name="enter">Enter</string>
+    <string name="jawandsingh_gmail_com">JawandSingh@gmail.com</string>
+    <string name="pwd">Password</string>
+    <string name="get_text">Get Text</string>
 </resources>
