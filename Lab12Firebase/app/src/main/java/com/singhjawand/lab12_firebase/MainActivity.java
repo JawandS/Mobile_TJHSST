@@ -30,10 +30,9 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-// ToDo - Issue 1: When user first enters token, doesn't retrieve from database
-// Todo - Issue 2: When user creates new account, doesn't display copy token button
-// ToDo - Issue 3: Add button displays incorrect text in edit text
-// ToDo - Issie 4: Adding a token doesn't add to user's list of tokens
+// ToDo - Issue 1: When user first enters token, retrieves incorrectly
+// ToDo - Issue 2: Add button doesn't work
+// ToDo - Issie 3: Adding a token doesn't add to user's list of tokens
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -201,6 +200,7 @@ public class MainActivity extends AppCompatActivity {
         // create and display a new token for a new user
         setContentView(R.layout.settings);
         LinearLayout workspaces = findViewById(R.id.workspaces);
+        LinearLayout copy_tokens = findViewById(R.id.tokens);
 
         user_id = user_id.replace(".", "");
         user_id = user_id.toLowerCase();
@@ -224,6 +224,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         workspaces.addView(child);
+
+        // Add copy button to copy tokens
+        Button token_child = new Button(getApplicationContext());
+        token_child.setText(new_token);
+        // Set on click listener for button
+        token_child.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Button view = (Button) v;
+                String token_value = view.getText().toString();
+
+                android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Token", token_value);
+                clipboard.setPrimaryClip(clip);
+            }
+        });
+        copy_tokens.addView(token_child);
     }
 
     public void findTokens(String user_id) {
@@ -321,9 +338,6 @@ public class MainActivity extends AppCompatActivity {
                 String value = dataSnapshot.getValue(String.class);
                 if (value != null)
                     userInput.setText(value);
-                else
-                    Toast.makeText(getApplicationContext(), "Text Returned NULL",
-                            Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -392,6 +406,9 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Failed to read value
                 System.out.println("Failed to read value." + databaseError.toException());
+
+                Toast.makeText(getApplicationContext(), "Unable to add token",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
