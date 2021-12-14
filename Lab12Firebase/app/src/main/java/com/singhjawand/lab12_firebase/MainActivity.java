@@ -30,6 +30,9 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+// ToDo - Issue 1: When user first enters toke, doesn't retrieve from database
+// Todo - Issue 2: When user creates new account, doesn't diplay copy token button
+
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText userInput;
@@ -65,33 +68,39 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        if (!global_token.equals("") && userInput != null) {
-            System.out.println("Entering test with: " + global_token);
-            enterText(global_token);
-        }
+        // Check that a workspace is active, and edit text isn't null, the save edit text
+        saveData();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        if (!global_token.equals("") && userInput != null) {
-            System.out.println("Entering test with: " + global_token);
-            enterText(global_token);
-        }
+        // Check that a workspace is active, and edit text isn't null, the save edit text
+        saveData();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
+        // Check that a workspace is active, and edit text isn't null, the save edit text
+        saveData();
+    }
+
+    public void saveData() {
+        // global token - active workspace
+        // userInput - editText in activity_main (V0)
         if (!global_token.equals("") && userInput != null) {
             System.out.println("Entering test with: " + global_token);
             enterText(global_token);
+        } else {
+            System.out.println("Saving data failed");
         }
     }
 
     private void updateUI(FirebaseUser user) {
+        // Prints to console authentication test
         if (user != null) {
             System.out.println("Authentication Test:  Email: " + user.getEmail() + "; Status: " +
                     user.isEmailVerified() + "; ID: " + user.getUid());
@@ -102,6 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void signUp(View view) {
+        // Signs user up with new email and password
+        // ToDo - have a confirm password edit text
         TextView newEmail = findViewById(R.id.new_email);
         TextView newPass = findViewById(R.id.new_password);
         String email = newEmail.getText().toString();
@@ -115,9 +126,12 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println("Authentication test:  createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
+
+                            // Change view to tokens screen
                             setContentView(R.layout.settings);
                             userInput = findViewById(R.id.userInput);
                             user_id = email.replace(".", "").toLowerCase();
+                            // generate a new token for the user automatically
                             generateTokens(email);
                         } else {
                             // If sign in fails, display a message to the user.
@@ -131,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void signIn(View view) {
+        // Sign in with previously established account
         TextView oldEmail = findViewById(R.id.old_email);
         TextView oldPass = findViewById(R.id.old_password);
         String email = oldEmail.getText().toString();
@@ -161,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
 
     public String createToken(int token_len) {
         // ToDo - add tokens to running list and ensure no two token are the same
-
+        // Generate a token_len long random character (V0 - token_len = 8)
         String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 + "0123456789"
                 + "abcdefghijklmnopqrstuvxyz";
@@ -181,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void generateTokens(String user_id) {
+        // create and display a new token for a new user
         setContentView(R.layout.settings);
         LinearLayout workspaces = findViewById(R.id.workspaces);
 
@@ -208,6 +224,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void findTokens(String user_id) {
+        // retrieve previously registered tokens and display them
         setContentView(R.layout.settings);
 
         LinearLayout workspaces = findViewById(R.id.workspaces);
@@ -270,16 +287,16 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {}
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Unable to retrieve data
+                Toast.makeText(getApplicationContext(), "Token Retrieval Failed",
+                        Toast.LENGTH_LONG).show();
+            }
         });
     }
 
     public void enterText(String id) {
-        System.out.println("id: " + id);
-
-//        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
-//        mDatabase.child(id).push().setValue(userInput.getText().toString());
-
+        // Update a token's value with value in the edit text, V0
         myRef = database.getReference(id);
         myRef.setValue(userInput.getText().toString());
     }
@@ -287,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void findText(String id) {
-        System.out.println("id: " + id);
+        // Find the text for a particular id
         myRef = database.getReference(id);
 
         // Read from the database
@@ -299,18 +316,22 @@ public class MainActivity extends AppCompatActivity {
                 String value = dataSnapshot.getValue(String.class);
                 if (value != null)
                     userInput.setText(value);
-//                Log.d(TAG, "Value is: " + value);
+                else
+                    Toast.makeText(getApplicationContext(), "Unable to Retrieve Text",
+                            Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Failed to read value
-//                Log.w(TAG, "Failed to read value.", error.toException());
+                // Unable to retrieve data
+                Toast.makeText(getApplicationContext(), "Unable to Retrieve Text",
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void addToken(View view) {
+        // add a new token to a users tokens
         String new_token = createToken(token_len);
 
         myRef = database.getReference(user_id);
@@ -331,18 +352,19 @@ public class MainActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 // Failed to read value
                 System.out.println("Failed to read value." + databaseError.toException());
+                Toast.makeText(getApplicationContext(), "Unable to add token",
+                        Toast.LENGTH_SHORT).show();
             }
         });
 
         setContentView(R.layout.activity_main);
         userInput = findViewById(R.id.userInput);
-
         global_token = new_token;
     }
 
     public void addNewToken(View view) {
         // Add new token from user input
-
+        // Called with the enter button in settings (token page) V0
         EditText newToken = findViewById(R.id.new_token);
         String new_token = newToken.getText().toString();
 
@@ -371,22 +393,5 @@ public class MainActivity extends AppCompatActivity {
         userInput = findViewById(R.id.userInput);
 
         global_token = new_token;
-        findText(global_token);
     }
 }
-
-
-//    @Override
-//    public void onDataChange(DataSnapshot dataSnapshot) {
-//        // This method is called once with the initial value and again
-//        // whenever data at this location is updated.
-//        String value = dataSnapshot.getValue(String.class);
-//        Log.d(TAG, "Value is: " + value);
-//    }
-//
-//    @Override
-//    public void onCancelled(DatabaseError error) {
-//        // Failed to read value
-//        Log.w(TAG, "Failed to read value.", error.toException());
-//    }
-//});
