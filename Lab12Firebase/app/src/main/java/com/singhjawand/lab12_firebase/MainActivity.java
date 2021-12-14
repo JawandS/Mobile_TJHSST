@@ -8,7 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,12 +25,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     EditText userInput;
     DatabaseReference myRef;
     FirebaseDatabase database;
-    String id = "message";
+    String[] tokens_array;
+    String user_id;
+    String global_token = "";
+    int token_len = 8;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,21 +62,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
 
-        enterText();
+        if (!global_token.equals("") && userInput != null) {
+            System.out.println("Entering test with: " + global_token);
+            enterText(global_token);
+        }
     }
 
     @Override
     protected void onStop() {
         super.onStop();
 
-        enterText();
+        if (!global_token.equals("") && userInput != null) {
+            System.out.println("Entering test with: " + global_token);
+            enterText(global_token);
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
-        enterText();
+        if (!global_token.equals("") && userInput != null) {
+            System.out.println("Entering test with: " + global_token);
+            enterText(global_token);
+        }
     }
 
     private void updateUI(FirebaseUser user) {
@@ -96,10 +112,10 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println("Authentication test:  createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            setContentView(R.layout.activity_main);
+                            setContentView(R.layout.settings);
                             userInput = findViewById(R.id.userInput);
-                            id = email;
-                            findText();
+                            user_id = email.replace(".", "").toLowerCase();
+                            generateTokens(email);
                         } else {
                             // If sign in fails, display a message to the user.
                             System.out.println("Authentication test:  createUserWithEmail:failure" + task.getException());
@@ -126,10 +142,9 @@ public class MainActivity extends AppCompatActivity {
                             System.out.println("Authen test:  signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            setContentView(R.layout.activity_main);
-                            userInput = findViewById(R.id.userInput);
-                            id = email;
-                            findText();
+                            setContentView(R.layout.settings);
+                            user_id = email.replace(".", "").toLowerCase();
+                            findTokens(email);
                         } else {
                             // If sign in fails, display a message to the user.
                             System.out.println("Authen test:  signInWithEmail:failure" + task.getException());
@@ -141,11 +156,62 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    public void enterText() {
-        id = id.replace(".", "");
-        System.out.println("id: " + id);
-        myRef = database.getReference(id);
-        myRef.setValue(userInput.getText().toString());
+    public String createToken(int token_len) {
+        String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+                + "0123456789"
+                + "abcdefghijklmnopqrstuvxyz";
+
+        // create StringBuffer size of AlphaNumericString
+        StringBuilder sb = new StringBuilder(token_len);
+
+        for (int i = 0; i < token_len; i++) {
+            // generate a random number between 0 to AlphaNumericString variable length
+            int index = (int) (AlphaNumericString.length() * Math.random());
+
+            // add Character one by one in end of sb
+            sb.append(AlphaNumericString.charAt(index));
+        }
+
+        return sb.toString();
+    }
+
+    public void generateTokens(String user_id) {
+        // ToDo - add tokens to running list and ensure no two token are the same
+        setContentView(R.layout.settings);
+        LinearLayout workspaces = findViewById(R.id.workspaces);
+
+        user_id = user_id.replace(".", "");
+        user_id = user_id.toLowerCase();
+
+        myRef = database.getReference(user_id);
+
+        String new_token = createToken(token_len);
+        myRef.setValue(new_token);
+
+        Button child = new Button(getApplicationContext());
+        child.setText(new_token);
+        // Set on click listener for button
+        child.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setContentView(R.layout.activity_main);
+                userInput = findViewById(R.id.userInput);
+
+                global_token = new_token;
+            }
+        });
+        workspaces.addView(child);
+    }
+
+    public void findTokens(String user_id) {
+        setContentView(R.layout.settings);
+
+        LinearLayout workspaces = findViewById(R.id.workspaces);
+        LinearLayout tokens = findViewById(R.id.tokens);
+
+        user_id = user_id.replace(".", "");
+        user_id = user_id.toLowerCase();
+        myRef = database.getReference(user_id);
 
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
@@ -153,21 +219,48 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                String value = dataSnapshot.getValue(String.class);
-                System.out.println("Firebase test: Value is: " + value);
+                tokens_array = dataSnapshot.getValue(String.class).split(" ");
+                for (String token : tokens_array) {
+                    Button child = new Button(getApplicationContext());
+                    child.setText(token);
+                    // Set on click listener for button
+                    child.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            setContentView(R.layout.activity_main);
+                            userInput = findViewById(R.id.userInput);
+
+                            findText(token);
+                            global_token = token;
+                        }
+                    });
+                    workspaces.addView(child);
+
+                    //ToDo - add token to list of tokens and enable copy
+                }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Failed to read value
-                System.out.println("Failed to read value." + databaseError.toException());
+            public void onCancelled(@NonNull DatabaseError error) {
             }
         });
     }
 
+    //ToDo - add method to add new tokens (make sure to add " " between tokens)
+
+    public void enterText(String id) {
+        System.out.println("id: " + id);
+
+//        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+//        mDatabase.child(id).push().setValue(userInput.getText().toString());
+
+        myRef = database.getReference(id);
+        myRef.setValue(userInput.getText().toString());
+    }
+
+
     @SuppressLint("SetTextI18n")
-    public void findText() {
-        id = id.replace(".", "");
+    public void findText(String id) {
         System.out.println("id: " + id);
         myRef = database.getReference(id);
 
@@ -178,7 +271,8 @@ public class MainActivity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 String value = dataSnapshot.getValue(String.class);
-                userInput.setText(value);
+                if (value != null)
+                    userInput.setText(value);
 //                Log.d(TAG, "Value is: " + value);
             }
 
@@ -188,6 +282,37 @@ public class MainActivity extends AppCompatActivity {
 //                Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
+    }
+
+    public void addToken(View view) {
+        // toDo - ensure to add token isn't same as other, change in generate token method
+        String new_token = createToken(token_len);
+
+        myRef = database.getReference(user_id);
+
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+                myRef.setValue(value + " " + new_token);
+
+                System.out.println("Firebase test: Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                System.out.println("Failed to read value." + databaseError.toException());
+            }
+        });
+
+        setContentView(R.layout.activity_main);
+        userInput = findViewById(R.id.userInput);
+
+        global_token = new_token;
     }
 }
 
