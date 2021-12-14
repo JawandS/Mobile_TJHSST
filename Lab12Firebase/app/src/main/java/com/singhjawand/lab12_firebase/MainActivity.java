@@ -30,8 +30,10 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
-// ToDo - Issue 1: When user first enters toke, doesn't retrieve from database
-// Todo - Issue 2: When user creates new account, doesn't diplay copy token button
+// ToDo - Issue 1: When user first enters token, doesn't retrieve from database
+// Todo - Issue 2: When user creates new account, doesn't display copy token button
+// ToDo - Issue 3: Add button displays incorrect text in edit text
+// ToDo - Issie 4: Adding a token doesn't add to user's list of tokens
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -218,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
                 userInput = findViewById(R.id.userInput);
 
                 global_token = new_token;
+                findText(global_token);
             }
         });
         workspaces.addView(child);
@@ -304,9 +307,11 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void findText(String id) {
-        // Find the text for a particular id
-        myRef = database.getReference(id);
-
+        // Find the text for a particular is
+        if (id.equals("") && !global_token.equals(""))
+            myRef = database.getReference(global_token);
+        else
+            myRef = database.getReference(id);
         // Read from the database
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -317,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
                 if (value != null)
                     userInput.setText(value);
                 else
-                    Toast.makeText(getApplicationContext(), "Unable to Retrieve Text",
+                    Toast.makeText(getApplicationContext(), "Text Returned NULL",
                             Toast.LENGTH_SHORT).show();
             }
 
@@ -360,6 +365,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         userInput = findViewById(R.id.userInput);
         global_token = new_token;
+        findText(global_token);
     }
 
     public void addNewToken(View view) {
@@ -393,5 +399,7 @@ public class MainActivity extends AppCompatActivity {
         userInput = findViewById(R.id.userInput);
 
         global_token = new_token;
+        findText(global_token);
+
     }
 }
