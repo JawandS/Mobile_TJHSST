@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,7 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -157,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public String createToken(int token_len) {
+        // ToDo - add tokens to running list and ensure no two token are the same
+
         String AlphaNumericString = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
                 + "0123456789"
                 + "abcdefghijklmnopqrstuvxyz";
@@ -176,7 +181,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void generateTokens(String user_id) {
-        // ToDo - add tokens to running list and ensure no two token are the same
         setContentView(R.layout.settings);
         LinearLayout workspaces = findViewById(R.id.workspaces);
 
@@ -207,7 +211,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.settings);
 
         LinearLayout workspaces = findViewById(R.id.workspaces);
-        LinearLayout tokens = findViewById(R.id.tokens);
+        LinearLayout copy_tokens = findViewById(R.id.tokens);
 
         user_id = user_id.replace(".", "");
         user_id = user_id.toLowerCase();
@@ -220,33 +224,55 @@ public class MainActivity extends AppCompatActivity {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
                 tokens_array = dataSnapshot.getValue(String.class).split(" ");
+                Set<String> tokens_used = new HashSet<>();
+
                 for (String token : tokens_array) {
-                    Button child = new Button(getApplicationContext());
-                    child.setText(token);
+                    if (tokens_used.contains(token))
+                        continue;
+                    else
+                        tokens_used.add(token);
+
+                    Button workspace_child = new Button(getApplicationContext());
+                    workspace_child.setText(token);
                     // Set on click listener for button
-                    child.setOnClickListener(new View.OnClickListener() {
+                    workspace_child.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            // Change view to main (workspace)
                             setContentView(R.layout.activity_main);
+                            // find the edit text in the workspace
                             userInput = findViewById(R.id.userInput);
 
+                            // find and update the edit text with text
                             findText(token);
+                            // set the global_token - which workspace is active
                             global_token = token;
                         }
                     });
-                    workspaces.addView(child);
+                    workspaces.addView(workspace_child);
 
-                    //ToDo - add token to list of tokens and enable copy
+                    Button copyTokens_child = new Button(getApplicationContext());
+                    copyTokens_child.setText(token);
+                    // Set on click listener for button
+                    copyTokens_child.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Button view = (Button) v;
+                            String token_value = view.getText().toString();
+
+                            android.content.ClipboardManager clipboard = (android.content.ClipboardManager) getApplicationContext().getSystemService(Context.CLIPBOARD_SERVICE);
+                            android.content.ClipData clip = android.content.ClipData.newPlainText("Copied Token", token_value);
+                            clipboard.setPrimaryClip(clip);
+                        }
+                    });
+                    copy_tokens.addView(copyTokens_child);
                 }
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
+            public void onCancelled(@NonNull DatabaseError error) {}
         });
     }
-
-    //ToDo - add method to add new tokens (make sure to add " " between tokens)
 
     public void enterText(String id) {
         System.out.println("id: " + id);
@@ -285,7 +311,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addToken(View view) {
-        // toDo - ensure to add token isn't same as other, change in generate token method
         String new_token = createToken(token_len);
 
         myRef = database.getReference(user_id);
@@ -313,6 +338,40 @@ public class MainActivity extends AppCompatActivity {
         userInput = findViewById(R.id.userInput);
 
         global_token = new_token;
+    }
+
+    public void addNewToken(View view) {
+        // Add new token from user input
+
+        EditText newToken = findViewById(R.id.new_token);
+        String new_token = newToken.getText().toString();
+
+        myRef = database.getReference(user_id);
+
+        // Read from the database
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+                String value = dataSnapshot.getValue(String.class);
+                myRef.setValue(value + " " + new_token);
+
+                System.out.println("Firebase test: Value is: " + value);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Failed to read value
+                System.out.println("Failed to read value." + databaseError.toException());
+            }
+        });
+
+        setContentView(R.layout.activity_main);
+        userInput = findViewById(R.id.userInput);
+
+        global_token = new_token;
+        findText(global_token);
     }
 }
 
