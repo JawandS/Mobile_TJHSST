@@ -14,18 +14,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    EditText userInput;
     DatabaseReference myRef;
     FirebaseDatabase database;
-    String[] tokens_array;
+
     String user_id;
     String global_token = "";
-//    UserData default_user = new UserData();
+    UserData userData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +40,72 @@ public class MainActivity extends AppCompatActivity {
         // Write a message to the database
         database = FirebaseDatabase.getInstance("https://schoolorganiz-default-rtdb.firebaseio.com/");
     }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Check that a workspace is active, and edit text isn't null, the save edit text
+        saveData();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        // Check that a workspace is active, and edit text isn't null, the save edit text
+        saveData();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // Check that a workspace is active, and edit text isn't null, the save edit text
+        saveData();
+    }
+
+    public void saveData() {
+        myRef = database.getReference(global_token);
+
+        if (!global_token.equals("")) {
+            System.out.println("Entering test with: " + global_token);
+            // ToDo: replace default_user with actual user
+            if (userData == null) {
+                myRef.setValue(new UserData());
+                System.out.println("Error: no user data");
+            } else {
+                myRef.setValue(userData);
+            }
+        } else {
+            System.out.println("Saving data failed");
+        }
+    }
+
+    public void loadData() {
+        if (!global_token.equals("")) {
+            myRef = database.getReference(global_token);
+
+            // Read from the database
+            myRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    // This method is called once with the initial value and again
+                    // whenever data at this location is updated.
+                    userData = dataSnapshot.getValue(UserData.class);
+                    System.out.println("Loaded user data: " + userData.getUser_id());
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Failed to read value
+                    System.out.println("Getting data failed");
+                }
+            });
+        }
+    }
+
 
     private void updateUI(FirebaseUser user) {
         // Prints to console authentication test
@@ -69,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
                             updateUI(user);
 
                             user_id = email.replace(".", "").toLowerCase();
+                            global_token = user_id;
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -100,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
                             user_id = email.replace(".", "").toLowerCase();
                             global_token = user_id;
+                            loadData();
                         } else {
                             // If sign in fails, display a message to the user.
                             System.out.println("Authen test:  signInWithEmail:failure" + task.getException());

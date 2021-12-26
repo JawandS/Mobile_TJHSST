@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                             setContentView(R.layout.settings);
 
                             user_id = email.replace(".", "").toLowerCase();
-
+                            global_token = user_id;
                         } else {
                             // If sign in fails, display a message to the user.
                             System.out.println("Authentication test:  createUserWithEmail:failure" + task.getException());
@@ -200,7 +200,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void saveUserData(String tkn, UserData datum){
         myRef = database.getReference(tkn);
-        myRef.setValue(datum);
+//        myRef.setValue(datum);
+        myRef.setValue("test");
     }
 
 }
