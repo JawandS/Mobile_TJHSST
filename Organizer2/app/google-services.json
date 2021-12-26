@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "997275899146",
+    "firebase_url": "https://schoolorganiz-default-rtdb.firebaseio.com",
+    "project_id": "schoolorganiz",
+    "storage_bucket": "schoolorganiz.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997275899146:android:e2853329a5c2d161e696f3",
+        "android_client_info": {
+          "package_name": "com.singhjawand.lab12_firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997275899146-uj2dglr4doivjd143bif32ngn4a7mo8o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcExSKEKsaFzp3seqVWnGmZkkaqnmiEsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997275899146-uj2dglr4doivjd143bif32ngn4a7mo8o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:997275899146:android:8d6f9a8d7a7b10a7e696f3",
+        "android_client_info": {
+          "package_name": "com.singhjawand.organizer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "997275899146-uj2dglr4doivjd143bif32ngn4a7mo8o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAcExSKEKsaFzp3seqVWnGmZkkaqnmiEsg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "997275899146-uj2dglr4doivjd143bif32ngn4a7mo8o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
