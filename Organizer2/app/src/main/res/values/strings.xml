@@ -15,4 +15,6 @@
     <string name="copy_token">Copy Token</string>
     <string name="add">add</string>
     <string name="token">token</string>
+    <string name="note">Note</string>
+    <string name="title">Title</string>
 </resources>

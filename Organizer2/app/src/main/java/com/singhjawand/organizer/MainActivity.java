@@ -3,9 +3,12 @@ package com.singhjawand.organizer;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,14 +23,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
+
+// https://www.youtube.com/watch?v=lpFDFK44pX8
+
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    DatabaseReference myRef;
+    DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
     FirebaseDatabase database;
 
     String user_id;
     String global_token = "";
     UserData userData;
+
+    LinearLayout notes;
+    EditText newNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,53 +78,102 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveData() {
-        myRef = database.getReference(global_token);
+        DatabaseReference userRef = myRef.child(global_token);
 
         if (!global_token.equals("")) {
             System.out.println("Entering test with: " + global_token);
             // ToDo: replace default_user with actual user
             if (userData == null) {
-                myRef.setValue(new UserData());
+//                userRef.setValue(new UserData());
                 System.out.println("Error: no user data");
             } else {
-                myRef.setValue(userData);
+                if (newNote != null)
+                    userData.addNote(global_token, newNote.getText().toString());
+                userRef.setValue(userData);
             }
         } else {
             System.out.println("Saving data failed");
         }
     }
 
-    public void loadData() {
+    public boolean loadData() {
         if (!global_token.equals("")) {
-            myRef = database.getReference(global_token);
+            DatabaseReference userRef = myRef.child(global_token);
+
+            final UserData[] tempUserData = new UserData[1];
 
             // Read from the database
-            myRef.addValueEventListener(new ValueEventListener() {
+
+
+            userRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                     // This method is called once with the initial value and again
                     // whenever data at this location is updated.
-                    userData = dataSnapshot.getValue(UserData.class);
-                    System.out.println("Loaded user data: " + userData.getUser_id());
+                    tempUserData[0] = dataSnapshot.getValue(UserData.class);
+//                    System.out.println("Loaded user data: " + userData.getUser_id());
+
                 }
 
                 @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                public void onCancelled(@NonNull DatabaseError databaseError) {
                     // Failed to read value
                     System.out.println("Getting data failed");
                 }
             });
+
+
+            userData = tempUserData[0];
+            if (userData == null)
+                System.out.println("User Data is null");
+//            ArrayList<String> allNotes = userData.getNotes();
+//            LinkedHashSet<String> uniqueNotes = new LinkedHashSet<>(allNotes);
+//
+//            for (String note: uniqueNotes){
+//                TextView view = new TextView(this);
+//                view.setText(note);
+//                notes.addView(view);
+//            }
+
+            return true;
+        } else {
+            System.out.println("No global token");
+            return false;
         }
     }
 
 
-    private void updateUI(FirebaseUser user) {
+    private void updateUI(FirebaseUser user, Boolean new_user) {
         // Prints to console authentication test
         if (user != null) {
             System.out.println("Authentication Test:  Email: " + user.getEmail() + "; Status: " +
                     user.isEmailVerified() + "; ID: " + user.getUid());
-            // Sets view to main
-            setContentView(R.layout.activity_main);
+            // Sets view to notepad
+            setContentView(R.layout.notepad);
+            notes = findViewById(R.id.notes);
+
+            // If the user is retuning load and display previous notes
+            if (!new_user) {
+                // Loads the data from the database
+                System.out.println("Loading data: " + loadData());
+                if (userData != null) {
+                    ArrayList<String> user_notes = userData.getNotes();
+                    for (String note : user_notes) {
+                        TextView tempNote = new TextView(getApplicationContext());
+                        tempNote.setText(note);
+                        notes.addView(tempNote);
+                    }
+                }
+            } else {
+                // If the user isn't new create a new user
+                userData = new UserData(global_token);
+            }
+
+            // Add a new edit text
+            newNote = new EditText(getApplicationContext());
+            newNote.setTextColor(Color.argb(255, 255, 255, 255));
+            notes.addView(newNote);
+
         } else {
             System.out.println("Authentication Test:  No verified user");
         }
@@ -134,17 +194,17 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             System.out.println("Authentication test:  createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
 
                             user_id = email.replace(".", "").toLowerCase();
                             global_token = user_id;
 
+                            updateUI(user, true);
                         } else {
                             // If sign in fails, display a message to the user.
                             System.out.println("Authentication test:  createUserWithEmail:failure" + task.getException());
                             Toast.makeText(getApplicationContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI(null, true);
                         }
                     }
                 });
@@ -165,17 +225,17 @@ public class MainActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             System.out.println("Authen test:  signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
 
                             user_id = email.replace(".", "").toLowerCase();
                             global_token = user_id;
-                            loadData();
+
+                            updateUI(user, false);
                         } else {
                             // If sign in fails, display a message to the user.
                             System.out.println("Authen test:  signInWithEmail:failure" + task.getException());
                             Toast.makeText(getApplicationContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            updateUI(null, false);
                         }
                     }
                 });
